@@ -1,5 +1,6 @@
 asgiref==3.8.1
 Django==4.2.7
+django-jazzmin==2.6.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 PyJWT==2.6.0
