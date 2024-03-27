@@ -1,6 +1,28 @@
 from userauths.models import Profile, User
 
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['full_name'] = user.full_name
+        token['email'] = user.email
+        token['username'] = user.username
+        try:
+            token['vendor_id'] = user.vendor.id
+        except:
+            token['vendor_id'] = 0
+
+        return token
+
 
 
 
