@@ -46,9 +46,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
 
         email_user, mobile = user.email.split('@')
-        user.set_password(validated_password['password'])
-
-        user.set_password(validated_password['password'])
+        user.username = email_user
+        user.set_password(validated_data['password'])
         user.save()
 
         return user
