@@ -36,6 +36,8 @@ backend:
 - python manage.py createsuperuser
 - pip install shortuuid
 - py manage.py makemigrations
+- py manage.py migrate
+- pip install django-cors-headers==3.14.0
 
 =============================
 - frontend:
