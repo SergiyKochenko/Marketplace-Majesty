@@ -49,6 +49,9 @@ backend:
 - yarn create vite . --template react 
 - "C:\Users\Acer PC\AppData\Local\Yarn\bin\create-vite" . --template react
 - yarn add axios dayjs jwt-decode js-cookie react-router-dom@6.10.0 zustand
+- yarn remove zustand
+- yarn add zustand@4.4.4
+- yarn add simple-zustand-devtools
 ----------
 - yarn dev
 ----------
