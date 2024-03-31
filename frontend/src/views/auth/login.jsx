@@ -60,10 +60,11 @@ function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-
-                <button type='submit'>
-                Login
-                </button>
+                <br />
+                <br />
+                <button type='submit'>Login</button>
+                <hr />
+                <Link to={'/forgot-password'}>Forgot Password</Link>
             </form>
         </div>
     )
