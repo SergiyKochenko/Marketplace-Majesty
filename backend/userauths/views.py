@@ -48,6 +48,29 @@ class PasswordRestEmailVerify(generics.RetrieveAPIView):
 
              print("link =====", link)
 
-
-
         return user
+    
+
+class PasswordChangeView(generics.CreateAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = UserSerializer
+    
+    def create(self, request, *args, **kwargs):
+        payload = request.data
+        
+        otp = payload['otp']
+        uidb64 = payload['uidb64']
+        reset_token = payload['reset_token']
+        password = payload['password']
+
+        user = User.objects.get(id=uidb64, otp=otp)
+        if user:
+            user.set_password(password)
+            user.otp = ""
+            user.reset_token = ""
+            user.save()
+
+            
+            return Response( {"message": "Password Changed Successfully"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response( {"message": "An Error Occured"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
