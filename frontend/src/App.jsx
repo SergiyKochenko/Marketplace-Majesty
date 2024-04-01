@@ -9,6 +9,7 @@ import Dashboard from './views/auth/dashboard';
 
 import Logout from './views/auth/logout';
 import ForgotPassword from './views/auth/forgotPassword';
+import CreatePassword from './views/auth/createPassword';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +22,7 @@ function App() {
       <Route path='/logout' element={<Logout />} />
       <Route path='/' element={<Dashboard />} />
       <Route path='/forgot-password' element={<ForgotPassword />} />
+      <Route path='/create-new-password' element={<CreatePassword />} />
     </Routes>
   </BrowserRouter>
   )
