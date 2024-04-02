@@ -1,21 +1,21 @@
 import { useState } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-
 import Register from './views/auth/register';
-
 import Login from './views/auth/login'
-
 import Dashboard from './views/auth/dashboard';
-
 import Logout from './views/auth/logout';
 import ForgotPassword from './views/auth/forgotPassword';
 import CreatePassword from './views/auth/createPassword';
+import StoreHeader from './views/base/StoreHeader';
+import StoreFooter from './views/base/StoreFooter';
+
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
   <BrowserRouter>
+  <StoreHeader />
     <Routes>
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
@@ -24,6 +24,7 @@ function App() {
       <Route path='/forgot-password' element={<ForgotPassword />} />
       <Route path='/create-new-password' element={<CreatePassword />} />
     </Routes>
+    <StoreFooter/>
   </BrowserRouter>
   )
 }
