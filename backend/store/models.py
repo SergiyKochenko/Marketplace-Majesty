@@ -58,4 +58,43 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+    
 
+class Gallery(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.FileField(upload_to="products", default="gallery.jpg")
+    active = models.BooleanField(default=True)
+    date = models.DateTimeField(auto_now_add=True)
+    gid = ShortUUIDField(unique=True, length=10, alphabet="abcdefg12345")
+
+    def __str__(self):
+        return self.product.title
+    
+    class Meta:
+        verbose_name_plural = "Product Images"
+
+class Specification(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    title = models.CharField(max_length=1000)
+    content = models.CharField(max_length=1000)
+
+
+    def __str__(self):
+        return self.title
+    
+class Size(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    name = models.CharField(max_length=1000)
+    price = models.DecimalField(default=0.00, decimal_places=2, max_digits=12)
+
+
+    def __str__(self):
+        return self.name
+    
+class Color(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    name = models.CharField(max_length=1000)
+    color_code = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.name
