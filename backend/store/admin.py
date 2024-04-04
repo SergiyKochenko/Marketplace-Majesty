@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from store.models import Product, Category, Gallery, Specification, Size, Color, Cart, CartOrder, CartOrderItem
+from store.models import CartOrderItem, Notification, Product,Category, Cart,CartOrder, Gallery,ProductFaq, Review,  Specification, Coupon, Color, Size, Wishlist
 
 class GalleryInline(admin.TabularInline):
     model = Gallery
@@ -41,10 +42,30 @@ class CartAdmin(admin.ModelAdmin):
 class CartOrderItemsAdmin(admin.ModelAdmin):
     list_display = ['order_id', 'vendor', 'product' ,'qty', 'price', 'sub_total', 'shipping_amount' , 'service_fee', 'tax_fee', 'total', 'date']
 
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_editable = ['active']
+    list_editable = ['active']
+    list_display = ['user', 'product', 'review', 'reply' ,'rating', 'active']
 
+class ProductFaqAdmin(admin.ModelAdmin):
+    list_editable = [ 'active', 'answer']
+    list_display = ['user', 'question', 'answer' ,'active']
+
+class CouponAdmin(admin.ModelAdmin):
+    list_editable = ['code', 'active', ]
+    list_display = ['vendor' ,'code', 'discount', 'active', 'date']
+
+class NotificationAdmin(admin.ModelAdmin):
+    list_editable = ['seen']
+    list_display = ['order', 'seen', 'user', 'vendor', 'date']
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Category,  CategoryAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartOrder, CartOrderAdmin)
 admin.site.register(CartOrderItem, CartOrderItemsAdmin)
+admin.site.register(Review, ProductReviewAdmin)
+admin.site.register(ProductFaq, ProductFaqAdmin)
+admin.site.register(Coupon, CouponAdmin)
+admin.site.register(Wishlist)
+admin.site.register(Notification, NotificationAdmin)
