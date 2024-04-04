@@ -13,4 +13,8 @@ urlpatterns = [
     path('user/register/', userauths_views.RegisterView.as_view()),
     path('user/password-reset/<email>/', userauths_views.PasswordRestEmailVerify.as_view(), name='password_reset'),
     path('user/password-change/', userauths_views.PasswordChangeView.as_view(), name='password_reset'),
+
+
+     path('category/', store_views.CategoryListAPIView.as_view()),
+     path('products/', store_views.ProductListAPIView.as_view(), name='products'),
 ]
