@@ -120,7 +120,7 @@ function ProductDetail() {
                                 {/* Quantity */}
                                 <div className="col-md-6 mb-4">
                                     <div className="form-outline">
-                                        <label className="form-label" htmlFor="typeNumber"><b>Quantity</b></label>
+                                        <label className="form-label" htmlFor="typeNumber"><b>Quantity:</b></label>
                                         <input
                                             type="number"
                                             id="typeNumber"
@@ -132,8 +132,6 @@ function ProductDetail() {
                                 </div>
 
                                 {/* Size */}
-                                {size?.length > 0 ? (
-                                    // Render something when the 'size' array has items
                                     <div className="col-md-6 mb-4">
                                         <div className="form-outline">
                                             <label className="form-label" htmlFor="typeNumber"><b>Size:</b></label>
@@ -141,30 +139,22 @@ function ProductDetail() {
                                         <div className='d-flex'>
                                             {size?.map((s, index) => (
                                                 <div key={index} className='me-2'>
-                                                    <input type="hidden" className='size_name' value={s.name} />
                                                     <button className='btn btn-secondary size_button'>{s.name}</button>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                ) : (
-                                    // Render empty div
-                                    <div></div>
-                                )}
 
                                 {/* Colors */}
 
                                 <div className="col-md-6 mb-4">
-                                    <div className="">
-                                    {color?.map((c, index) => (
-                                        
-                                            <button className='btn p-3 ms-2' style={{backgroundColor: `${c.color_code}`}}></button>
-
-                                    ))}
-                                    </div>
-
+                                <div className="form-outline">
+                                    <label className="form-label" htmlFor="typeNumber"><b>Color:</b></label>
                                 </div>
-
+                                    {color?.map((c, index) => (
+                                        <button className='btn p-3 ms-2' style={{backgroundColor: `${c.color_code}`}}></button>
+                                    ))}
+                                </div>
                             </div>
                             <button type="button" className="btn btn-primary btn-rounded me-2">
                                 <i className="fas fa-cart-plus me-2" /> Add to cart
