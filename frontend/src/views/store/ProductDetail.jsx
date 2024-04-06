@@ -9,6 +9,10 @@ function ProductDetail() {
     const [gallery, setgallery] = useState([])
     const [color, setColor] = useState([])
     const [size, setSize] = useState([])
+    const [qtyValue, setQtyValue] = useState(1)
+
+    const [colorValue, setColorValue] = useState("No Color")
+    const [sizeValue, setSizeValue] = useState("No Size")
 
     const param = useParams()
 
@@ -21,6 +25,27 @@ function ProductDetail() {
             setSize(res.data.size);
         })
     }, [])
+
+    const handleColorButtonClick = (event) => {
+        const colorNameInput = event.target.closest('.color_button').parentNode.querySelector('.color_name');
+        setColorValue(colorNameInput.value);
+    }
+
+    const handleSizeButtonClick = (event) => {
+        const sizeNameInput = event.target.closest('.size_button').parentNode.querySelector('.size_name');
+        setSizeValue(sizeNameInput.value)   
+    };
+
+    const handleQuantityChange = (event) => {
+        setQtyValue(event.target.value);
+    }
+
+    const handleAddToCart = () => {
+       console.log("Qty:",qtyValue);
+       console.log("Color",colorValue);
+       console.log("Size",sizeValue);
+       console.log("Product ID:", product.id);
+    };
 
     return (
     <main className="mb-4 mt-4">
@@ -115,7 +140,7 @@ function ProductDetail() {
                             </table>
                         </div>
                         <hr className="my-5" />
-                        <form action="">
+                        <div>
                             <div className="row flex-column">
                                 {/* Quantity */}
                                 <div className="col-md-6 mb-4">
@@ -126,43 +151,62 @@ function ProductDetail() {
                                             id="typeNumber"
                                             className="form-control quantity"
                                             min={1}
-                                            value={1}
+                                            value={qtyValue}
+                                            onChange={handleQuantityChange}
                                         />
                                     </div>
                                 </div>
 
                                 {/* Size */}
+                                {size?.length > 0 ? (
                                     <div className="col-md-6 mb-4">
                                         <div className="form-outline">
-                                            <label className="form-label" htmlFor="typeNumber"><b>Size:</b></label>
+                                            <label className="form-label" htmlFor="typeNumber"><b>Size: </b>{sizeValue}</label>
                                         </div>
                                         <div className='d-flex'>
                                             {size?.map((s, index) => (
                                                 <div key={index} className='me-2'>
-                                                    <button className='btn btn-secondary size_button'>{s.name}</button>
+                                                    <input type="hidden" className='size_name' value={s.name} />
+                                                    <button className='btn btn-secondary size_button' onClick={handleSizeButtonClick}>{s.name}</button>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
 
-                                {/* Colors */}
+                                    ) : (
+                                        // Render empty div
+                                        <div></div>
+                                    )}
 
+                                {/* Colors */}
+                                {color?.length > 0 ? (
                                 <div className="col-md-6 mb-4">
-                                <div className="form-outline">
-                                    <label className="form-label" htmlFor="typeNumber"><b>Color:</b></label>
-                                </div>
-                                    {color?.map((c, index) => (
-                                        <button className='btn p-3 ms-2' style={{backgroundColor: `${c.color_code}`}}></button>
-                                    ))}
-                                </div>
+                                                        <div className="form-outline">
+                                                            <label className="form-label" htmlFor="typeNumber"><b>Color:</b> <span>{colorValue}</span></label>
+                                                        </div>
+                                                        <div className='d-flex'>
+                                                            {color?.map((c, index) => (
+                                                                <div key={index}>
+                                                                    <input type="hidden" className='color_name' value={c.name} name='' id='' />
+                                                                    <button className='btn p-3 me-2 color_button' type='button' onClick={handleColorButtonClick} style={{ backgroundColor: `${c.color_code}` }}></button>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+
+                                                        </div>
+                                                    ) : (
+                                                        // Render empty div
+                                                        <div></div>
+                                                    )}
                             </div>
-                            <button type="button" className="btn btn-primary btn-rounded me-2">
-                                <i className="fas fa-cart-plus me-2" /> Add to cart
+                            <button type="button" className="btn btn-primary btn-rounded me-2" onClick={ handleAddToCart}>
+                                <i className="fas fa-cart-plus me-2" />
+                                 Add to cart
                             </button>
                             <button href="#!" type="button" className="btn btn-danger btn-floating" data-mdb-toggle="tooltip" title="Add to wishlist">
                                 <i className="fas fa-heart" />
                             </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
