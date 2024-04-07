@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import apiInstance from '../../utils/axios';
 import GetCurrentAddress from '../plugin/UserCountry';
 import UserData from '../plugin/UserData';
-import CartID from './CardID';
+import CartID from '../plugin/CardID';
 import Swal from 'sweetalert2'
 
 const Toast =Swal.mixin({

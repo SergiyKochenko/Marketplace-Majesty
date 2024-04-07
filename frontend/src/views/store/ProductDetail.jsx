@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import apiInstance from '../../utils/axios'
 import GetCurrentAddress from '../plugin/UserCountry'
 import UserData from '../plugin/UserData'
-import CartID from './CardID'
+import CartID from '../plugin/CardID'
 
 function ProductDetail() {
     const [product, setProduct] = useState({})
@@ -329,7 +329,7 @@ function ProductDetail() {
                     <div className="row g-0">
                         <div className="col-md-4">
                             <img
-                                src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
+                                src="https://"
                                 style={{
                                     height: "100%",
                                     width: "100%",
@@ -341,8 +341,8 @@ function ProductDetail() {
                         </div>
                         <div className="col-md-8">
                             <div className="card-body">
-                                <h5 className="card-title">John Doe</h5>
-                                <p className="card-text">Frontend Developer</p>
+                            <h5 className="card-title">Mike Matarazo</h5>
+                            <p className="card-text">Vendor Shop</p>
                             </div>
                         </div>
                     </div>
@@ -397,7 +397,7 @@ function ProductDetail() {
                                 <div className="row g-0">
                                     <div className="col-md-3">
                                         <img
-                                            src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
+                                            src="https://"
                                             alt="User Image"
                                             className="img-fluid"
                                         />
@@ -418,7 +418,7 @@ function ProductDetail() {
                                 <div className="row g-0">
                                     <div className="col-md-3">
                                         <img
-                                            src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
+                                            src="https://"
                                             alt="User Image"
                                             className="img-fluid"
                                         />
