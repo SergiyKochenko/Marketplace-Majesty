@@ -7,6 +7,45 @@ function Products() {
     const [products, setProducts] = useState([])
     const [category, setCategory] = useState([])
 
+    const [colorValue, setColorValue] = useState("No Color")
+    const [sizeValue, setSizeValue] = useState("No Size")
+    const [qtyValue, setQtyValue] = useState(1)
+
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedColors, setSelectedColors] = useState({});
+
+    const [selectedSize, setSelectedSize] = useState({});
+
+
+    const handleColorButtonClick = (event, product_id, colorName) => {
+        setColorValue(colorName);
+        setSelectedProduct(product_id);
+
+        setSelectedColors((prevSelectedColors) => ({
+            ...prevSelectedColors,
+            [product_id]: colorName,
+        }));
+
+    };
+
+    const handleSizeButtonClick = (event, product_id, sizeName) => {
+        setSizeValue(sizeName);
+        setSelectedProduct(product_id);
+        
+
+        setSelectedSize((prevSelectedSize) => ({
+            ...prevSelectedSize,
+            [product_id]: sizeName,
+        }));
+
+    }
+
+    const handleQtyChange = (event, product_id) => {
+        setQtyValue(event.target.value);
+        setSelectedProduct(product_id);
+    };
+
+
     useEffect(() => {
         apiInstance.get(`products/`).then((response) => {
             setProducts(response.data)
@@ -70,53 +109,66 @@ function Products() {
                             className="dropdown-menu"
                             aria-labelledby="dropdownMenuClickable"
                         >
-                            <div className="d-flex flex-column">
-                            <li className="p-1">
-                                <b>Size</b>: XL
-                            </li>
+
+
+
+                        
+                            {/* Quantity */}
+                            <div className="d-flex flex-column mb-2 mt-2 p-1">
                             <div className="p-1 mt-0 pt-0 d-flex flex-wrap">
+                                <>
+                                    <li>
+                                        <input
+                                            type="number"
+                                            className='form-control'
+                                            placeholder='Quantity'
+                                            onChange={(e) => handleQtyChange(e, p.id)}
+                                        />
+                                    </li>
+                                </>
+                            </div>
+                        </div>
+                       
+
+
+
+
+
+                            {p.size?.length > 0 &&
+                                <div className="d-flex flex-column">
+                                    <li className="p-1">
+                                        <b>Size</b>: {selectedSize[p.id] || 'Select a size'}
+                                    </li>
+                                <div className="p-1 mt-0 pt-0 d-flex flex-wrap">
+                            {p.size?.map((size, index) => (
                                 <li>
-                                <button className="btn btn-secondary btn-sm me-2 mb-1">
-                                    XXL
-                                </button>
+                                    <button on onClick={(e) => handleSizeButtonClick(e, p.id, size.name)} className="btn btn-secondary btn-sm me-2 mb-1">
+                                        {size.name}
+                                    </button>
                                 </li>
-                                <li>
-                                <button className="btn btn-secondary btn-sm me-2 mb-1">
-                                    XXL
-                                </button>
-                                </li>
-                                <li>
-                                <button className="btn btn-secondary btn-sm me-2 mb-1">
-                                    XXL
-                                </button>
-                                </li>
+                                ))}
+                                
                             </div>
                             </div>
+                            }
+                            {p.color?.length > 0 &&
                             <div className="d-flex flex-column mt-3">
                             <li className="p-1">
-                                <b>COlor</b>: Red
+                                <b>Color</b>: {selectedColors[p.id] || 'Select a color'}
                             </li>
                             <div className="p-1 mt-0 pt-0 d-flex flex-wrap">
+                            {p.color?.map((color, index) => (
                                 <li>
                                 <button
                                     className="btn btn-sm me-2 mb-1 p-3"
-                                    style={{ backgroundColor: "red" }}
+                                    style={{ backgroundColor: `${color.color_code}`}}
+                                    onClick={(e) => handleColorButtonClick(e, p.id, color.name)}
                                 />
                                 </li>
-                                <li>
-                                <button
-                                    className="btn btn-sm me-2 mb-1 p-3"
-                                    style={{ backgroundColor: "green" }}
-                                />
-                                </li>
-                                <li>
-                                <button
-                                    className="btn btn-sm me-2 mb-1 p-3"
-                                    style={{ backgroundColor: "yellow" }}
-                                />
-                                </li>
+                                ))}
                             </div>
                             </div>
+                            }
                             <div className="d-flex mt-3 p-1">
                             <button
                                 type="button"
