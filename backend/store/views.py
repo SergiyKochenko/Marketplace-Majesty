@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 from store.serializers import  ProductSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer
 from userauths.models import User
-from store.models import Cart, CartOrderItem, Notification, Product,Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Wishlist, Vendor
+from store.models import Cart, CartOrderItem, Notification, Product,Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
 
 
@@ -56,9 +56,10 @@ class CartAPIView(generics.ListCreateAPIView):
         else:
             user = None
 
-        tax = Tax.object.filter(country=country).first()
+        tax = Tax.objects.filter(country=country).first()
         if tax:
             tax_rate = tax.rate / 100
+            
         else:
             tax_rate = 0
         
@@ -77,8 +78,8 @@ class CartAPIView(generics.ListCreateAPIView):
             cart.country = country
             cart.cart_id = cart_id
 
-            service_fee_precentage = 5 /100
-            cart.service_fee = service_fee_precentage * cart.sub_total
+            service_fee_precentage = 1 /100
+            cart.service_fee = Decimal(service_fee_precentage) * cart.sub_total
 
             cart.total = cart.sub_total + cart.shipping_amount + cart.service_fee + cart.tax_fee
             cart.save()
@@ -98,8 +99,8 @@ class CartAPIView(generics.ListCreateAPIView):
             cart.country = country
             cart.cart_id = cart_id
 
-            service_fee_precentage = 5 /100
-            cart.service_fee = service_fee_precentage * cart.sub_total
+            service_fee_precentage = 1 /100
+            cart.service_fee = Decimal(service_fee_precentage) * cart.sub_total
 
             cart.total = cart.sub_total + cart.shipping_amount + cart.service_fee + cart.tax_fee
             cart.save()

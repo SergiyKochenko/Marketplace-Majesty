@@ -50,17 +50,36 @@ function ProductDetail() {
         setQtyValue(event.target.value);
     }
 
-    const handleAddToCart = () => {
-        console.log("User ID", userData?.user_id);
-        console.log("Product ID:", product.id);
-        console.log("Cart ID", cart_id);
-        console.log("Price:", product.price);
-        console.log("Shipping Amount:", product.shipping_amount);
-        console.log("Qty:", qtyValue);
-        console.log("Color", colorValue);
-        console.log("Size", sizeValue); 
-        console.log("Country", currentAddress.country);
+    const handleAddToCart = async () => {
+        // console.log("User ID", userData?.user_id);
+        // console.log("Product ID:", product.id);
+        // console.log("Cart ID", cart_id);
+        // console.log("Price:", product.price);
+        // console.log("Shipping Amount:", product.shipping_amount);
+        // console.log("Qty:", qtyValue);
+        // console.log("Color", colorValue);
+        // console.log("Size", sizeValue); 
+        // console.log("Country", currentAddress.country);
+
+        try{
+            const formdata = new FormData()
+
+        formdata.append('product_id', product.id)
+        formdata.append('user_id', userData?.user_id)
+        formdata.append('qty', qtyValue)
+        formdata.append('price' , product.price)
+        formdata.append('shipping_amount', product.shipping_amount)
+        formdata.append('country', currentAddress.country)
+        formdata.append('size', sizeValue)
+        formdata.append('color', colorValue)
+        formdata.append('cart_id', cart_id)
+
+        const response = await apiInstance.post('cart-view/', formdata)
+        console.log(response.data)
         
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
