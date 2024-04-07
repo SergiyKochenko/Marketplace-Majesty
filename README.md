@@ -55,6 +55,7 @@ backend:
 - yarn remove zustand
 - yarn add zustand@4.4.4
 - yarn add simple-zustand-devtools
+- yarn add sweetalert2
 ----------
 - yarn dev
 ----------
