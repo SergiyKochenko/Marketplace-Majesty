@@ -58,7 +58,7 @@ function Cart() {
                       </p>
                       <p className='mb-0'>
                         <span className="text-muted me-2">Vendor:</span>
-                        <span>Desphixs</span>
+                        <span>Tom Cruse</span>
                       </p>
                       <p className="mt-3">
                         <button className="btn btn-danger ">
