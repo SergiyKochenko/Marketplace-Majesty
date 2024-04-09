@@ -1,36 +1,44 @@
-import React, { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData';
 import CartID from '../plugin/CardID';
 
 function Cart() {
-  const [cart, setCart] = useState([])
+    const [cart, setCart] = useState([]);
+ 
+    const [cartTotal, setCartTotal] = useState(0);
 
-  const userData = UserData()
-  const cart_id = CartID()
+    const userData = UserData();
+    const cart_id = CartID();
 
-  const fetchCartData = (cartId, userId) => {
-    const url = userId ? `cart-list/${cartId}/${userId}/` : `cart-list/${cartId}/`;
+    const fetchCartData = (cartId, userId) => {
+        const url = userId ? `cart-list/${cartId}/${userId}/` : `cart-list/${cartId}/`;
+        apiInstance.get(url).then((res) => {
+            setCart(res.data);
+        });
+    };
 
-    apiInstance.get(url).then((res) => {
-      setCart(res.data)
-    })
-};
+    const fetchCartTotal = (cartId, userId) => {
+        const url = userId ? `cart-detail/${cartId}/${userId}/` : `cart-detail/${cartId}/`;
+        apiInstance.get(url).then((res) => {
+            setCartTotal(res.data);
+        });
+    };
 
-if (cart_id !== null || cart_id !== undefined){
-    if (userData !== undefined){
-      // Send Cart Data with userId and CartId
-      useEffect(() => {
-        fetchCartData(cart_id, userData?.user_id)
-      }, [])
-    } else {
-      // Send cart data without userId but only cartId
-      useEffect(() => {
-        fetchCartData(cart_id, null)
-      }, [])
-    }
-}
+
+    useEffect(() => {
+
+        if (cart_id) {
+            const userId = userData ? userData.user_id : null;
+            fetchCartData(cart_id, userId);
+            fetchCartTotal(cart_id, userId);
+        }
+    }, [], [cart_id, userData]);
+
+
+    console.log(cartTotal);
+
 
   return (
   <main className="mt-5">
@@ -231,25 +239,25 @@ if (cart_id !== null || cart_id !== undefined){
                 <section className="shadow-4 p-4 rounded-5 mb-4">
                   <h5 className="mb-3">Cart Summary</h5>
                   <div className="d-flex justify-content-between mb-3">
-                    <span>Subtotal </span>
-                    <span>$10.00</span>
+                    <span>Sub Total </span>
+                    <span>${cartTotal.sub_total?.toFixed(2)}</span>
                   </div>
                   <div className="d-flex justify-content-between">
                     <span>Shipping </span>
-                    <span>$10.00</span>
+                    <span>${cartTotal.shipping?.toFixed(2)}</span>
                   </div>
                   <div className="d-flex justify-content-between">
-                    <span>Tax </span>
-                    <span>$10.00</span>
+                    <span>Tax Fee </span>
+                    <span>${cartTotal.tax?.toFixed(2)}</span>
                   </div>
                   <div className="d-flex justify-content-between">
                     <span>Servive Fee </span>
-                    <span>$10.00</span>
+                    <span>${cartTotal.service_fee?.toFixed(2)} </span>
                   </div>
                   <hr className="my-4" />
                   <div className="d-flex justify-content-between fw-bold mb-5">
                     <span>Total amount (included VAT) </span>
-                    <span>$10.00</span>
+                    <span>${cartTotal.total?.toFixed(2)}</span>
                   </div>
                   <button className="btn btn-primary btn-rounded w-100" >
                     Proceed to checkout <i className='fas fa-arrow-right'></i>
