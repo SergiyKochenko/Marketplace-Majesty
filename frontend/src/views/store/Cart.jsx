@@ -6,8 +6,9 @@ import CartID from '../plugin/CardID';
 
 function Cart() {
     const [cart, setCart] = useState([]);
- 
     const [cartTotal, setCartTotal] = useState(0);
+
+    const [productQuantities, setProductQuantities] = useState('');
 
     const userData = UserData();
     const cart_id = CartID();
@@ -35,9 +36,27 @@ function Cart() {
             fetchCartTotal(cart_id, userId);
         }
     }, [], [cart_id, userData]);
+    
+    useEffect(() => {
+      const initialQuantities = {};
+      cart.forEach((c) => {
+          initialQuantities[c.product.id] = c.qty
+      });
+      
+      setProductQuantities(initialQuantities)
+  }, [cart]);
 
 
-    console.log(cartTotal);
+    const handleQtyChange = (event, product_id) => {
+        const quantity = event.target.value
+        console.log(quantity)
+        console.log(product_id)
+
+        setProductQuantities((prevQuantities) => ({
+          ...prevQuantities,
+          [product_id]:quantity
+        }))
+    }
 
 
   return (
@@ -114,13 +133,15 @@ function Cart() {
                     <div className="col-md-2 mb-4 mb-md-0">
                       <div className="d-flex justify-content-center align-items-center">
                         <div className="form-outline">
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={c.qty}
-                            min={1}
+                        <input
+                        type="number"
+                        id={`qtyInput-${c.product.id}`}
+                        className="form-control"
+                        onChange={(e) => handleQtyChange(e, c.product.id)}
+                        value={productQuantities[c.product.id] || c.qty}
+                        min={1}
 
-                          />
+                    />
                         </div>
                         <button className='ms-2 btn btn-primary'><i className='fas fa-rotate-right'></i></button>
                       </div>
