@@ -162,20 +162,26 @@ function Cart() {
           text: "All fields are required before checkout",
       })
 
+    } else {
+
+    try {
+      const formData = new FormData();
+      formData.append('full_name', fullName);
+      formData.append('email', email);
+      formData.append('mobile', mobile);
+      formData.append('address', address);
+      formData.append('city', city);
+      formData.append('state', state);
+      formData.append('country', country);
+      formData.append('cart_id', cart_id);
+      formData.append('user_id', userData ? userData.user_id : 0);
+
+      const response = await apiInstance.post('create-order/', formData)
+    } catch (error) {
+      console.log(error)
     }
-
-    const formData = new FormData();
-    formData.append('full_name', fullName);
-    formData.append('email', email);
-    formData.append('mobile', mobile);
-    formData.append('address', address);
-    formData.append('city', city);
-    formData.append('state', state);
-    formData.append('country', country);
-    formData.append('cart_id', cart_id);
-    formData.append('user_id', userData ? userData.user_id : 0);
-
-    const response = await apiInstance.post('create-order/', formData)
+    
+  }
 
   } 
 
