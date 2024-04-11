@@ -152,14 +152,31 @@ function Cart() {
 };
 
 
-const createCartOrder = () => {
-      console.log('full_name', fullName);
-      console.log('email', email);
-      console.log('mobile', mobile);
-      console.log('address', address);
-      console.log('city', city);
-      console.log('state', state);
-      console.log('country', country);
+  const createCartOrder = async () => {
+
+    if (!fullName || !email || !mobile || !address || !city || !state || !country) {
+      console.log("Please fill in all required fields");
+      Swal.fire({
+          icon: 'warning',
+          title: 'Missing Fields!',
+          text: "All fields are required before checkout",
+      })
+
+    }
+
+    const formData = new FormData();
+    formData.append('full_name', fullName);
+    formData.append('email', email);
+    formData.append('mobile', mobile);
+    formData.append('address', address);
+    formData.append('city', city);
+    formData.append('state', state);
+    formData.append('country', country);
+    formData.append('cart_id', cart_id);
+    formData.append('user_id', userData ? userData.user_id : 0);
+
+    const response = await apiInstance.post('create-order/', formData)
+
   } 
 
   return (
