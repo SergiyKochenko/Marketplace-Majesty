@@ -5,6 +5,7 @@ import UserData from '../plugin/UserData';
 import CartID from '../plugin/CardID';
 import GetCurrentAddress from '../plugin/UserCountry';
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
 
 const Toast =Swal.mixin({
   toast: true,
@@ -31,6 +32,7 @@ function Cart() {
     const userData = UserData();
     const cart_id = CartID();
     const currentAddress = GetCurrentAddress()
+    const navigate = useNavigate()
 
     const fetchCartData = (cartId, userId) => {
         const url = userId ? `cart-list/${cartId}/${userId}/` : `cart-list/${cartId}/`;
@@ -164,19 +166,20 @@ function Cart() {
 
     } else {
 
-    try {
-      const formData = new FormData();
-      formData.append('full_name', fullName);
-      formData.append('email', email);
-      formData.append('mobile', mobile);
-      formData.append('address', address);
-      formData.append('city', city);
-      formData.append('state', state);
-      formData.append('country', country);
-      formData.append('cart_id', cart_id);
-      formData.append('user_id', userData ? userData.user_id : 0);
+      try {
+        const formData = new FormData();
+        formData.append('full_name', fullName);
+        formData.append('email', email);
+        formData.append('mobile', mobile);
+        formData.append('address', address);
+        formData.append('city', city);
+        formData.append('state', state);
+        formData.append('country', country);
+        formData.append('cart_id', cart_id);
+        formData.append('user_id', userData ? userData.user_id : 0);
 
-      const response = await apiInstance.post('create-order/', formData)
+        const response = await apiInstance.post('create-order/', formData)
+        navigate(`/checkout/${response.data.order_oid}/`)
     } catch (error) {
       console.log(error)
     }
