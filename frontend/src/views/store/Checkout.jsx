@@ -150,7 +150,7 @@ function Checkout() {
 
                             <div className="shadow p-3 d-flex mt-4 mb-4">
                                 <input readOnly value={""} name="couponCode" type="text" className='form-control' style={{ border: "dashed 1px gray" }} placeholder='Enter Coupon Code' id="" />
-                                <button className='btn btn-success ms-1'>Apply<i className='fas fa-check-circle'></i></button>
+                                <button className='btn btn-success ms-1'>Apply</button>
                             </div>
                                 <button type="submit" className="btn btn-primary btn-rounded w-100 mt-2" style={{ backgroundColor: "#635BFF" }}>Pay Now (Stripe) <i className='fas fa-credit-card'></i></button>
                         </section>

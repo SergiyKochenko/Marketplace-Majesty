@@ -204,6 +204,9 @@ class CartOrderItem(models.Model):
     service_fee = models.DecimalField(default=0.00, max_digits=12, decimal_places=2)
     total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     country = models.CharField(max_length=100, null=True, blank=True)
+
+    # Coupons
+    coupon = models.ManyToManyField("store.Coupon", blank=True)
     initial_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     saved = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     oid = ShortUUIDField(unique=True, length=10, alphabet="abcdefg12345")
