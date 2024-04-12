@@ -428,18 +428,7 @@ function Cart() {
                     Proceed to checkout <i className='fas fa-arrow-right'></i>
                   </button>
                 </section>
-                <section className='shadow rounded-3 card p-4 rounded-5'>
-                    <h5 className='mb-4'>Apply promo code</h5>
-                    <div className='d-flex align=item-center'>
-                    <input type='text'
-                    className='front-control rounded me-1'
-                    placeholder='Promo code' />
-                    <button type='text' className='btn btn-success btn-rounded overflow-vsible'>
-                        Apply
-                    </button>
-
-                    </div>               
-                </section>
+                
               </div>
             </div>
           </section>

@@ -1,6 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import apiInstance from '../../utils/axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function Checkout() {
+    const [order, setOrder] = useState([])
+
+    const param = useParams()
+    console.log(param.order_oid)
+
+    useEffect(() => {
+        apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
+            setOrder(res.data)
+        })
+    }, [])
+
   return (
 <main>
     <main className="mb-4 mt-4">
@@ -23,6 +36,7 @@ function Checkout() {
                                                 type="text"
                                                 readOnly
                                                 className="form-control"
+                                                value={order.full_name}
                                             />
                                         </div>
                                     </div>
@@ -34,6 +48,7 @@ function Checkout() {
                                                 type="text"
                                                 readOnly
                                                 className="form-control"
+                                                value={order.email}
                                             />
                                         </div>
                                     </div>
@@ -45,6 +60,7 @@ function Checkout() {
                                                 type="text"
                                                 readOnly
                                                 className="form-control"
+                                                value={order.mobile}
                                             />
                                         </div>
                                     </div>
@@ -55,6 +71,7 @@ function Checkout() {
                                                 type="text"
                                                 readOnly
                                                 className="form-control"
+                                                value={order.address}
                                             />
                                         </div>
                                     </div>
@@ -65,6 +82,7 @@ function Checkout() {
                                                 type="text"
                                                 readOnly
                                                 className="form-control"
+                                                value={order.city}
                                             />
                                         </div>
                                     </div>
@@ -75,6 +93,7 @@ function Checkout() {
                                                 type="text"
                                                 readOnly
                                                 className="form-control"
+                                                value={order.state}
                                             />
                                         </div>
                                     </div>
@@ -85,6 +104,7 @@ function Checkout() {
                                                 type="text"
                                                 readOnly
                                                 className="form-control"
+                                                value={order.country}
                                             />
                                         </div>
                                     </div>
@@ -108,34 +128,31 @@ function Checkout() {
                             <h5 className="mb-3">Order Summary</h5>
                             <div className="d-flex justify-content-between mb-3">
                                 <span>Subtotal </span>
-                                <span>$10.00</span>
+                                <span>${order.sub_total}</span>
                             </div>
                             <div className="d-flex justify-content-between">
                                 <span>Shipping </span>
-                                <span>$10.00</span>
+                                <span>${order.shipping_amount}</span>
                             </div>
                             <div className="d-flex justify-content-between">
                                 <span>Tax </span>
-                                <span>$10.00</span>
+                                <span>${order.tax_fee}</span>
                             </div>
                             <div className="d-flex justify-content-between">
                                 <span>Servive Fee </span>
-                                <span>$10.00</span>
+                                <span>${order.service_fee}</span>
                             </div>
                             <hr className="my-4" />
                             <div className="d-flex justify-content-between fw-bold mb-5">
                                 <span>Total </span>
-                                <span>$10.00</span>
+                                <span>${order.total}</span>
                             </div>
 
                             <div className="shadow p-3 d-flex mt-4 mb-4">
                                 <input readOnly value={""} name="couponCode" type="text" className='form-control' style={{ border: "dashed 1px gray" }} placeholder='Enter Coupon Code' id="" />
-                                <button className='btn btn-success ms-1'><i className='fas fa-check-circle'></i></button>
+                                <button className='btn btn-success ms-1'>Apply<i className='fas fa-check-circle'></i></button>
                             </div>
-
-                            
                                 <button type="submit" className="btn btn-primary btn-rounded w-100 mt-2" style={{ backgroundColor: "#635BFF" }}>Pay Now (Stripe) <i className='fas fa-credit-card'></i></button>
-                           
                         </section>
                     </div>
                 </div>
