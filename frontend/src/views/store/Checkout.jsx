@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import apiInstance from '../../utils/axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import { SERVER_URL } from '../../utils/constants';
 
 function Checkout() {
     const [order, setOrder] = useState([])
     const [couponCode, setCouponCode] = useState("")
+    const [paymentLoading, setPaymentLoading] = useState(false)
 
     const param = useParams()
     
@@ -40,6 +42,11 @@ function Checkout() {
         console.log(error)
     }
     }
+
+    const payWithStripe = (event) => {
+        setPaymentLoading(true)
+        event.target.form.submit();
+      }
 
   return (
 <main>
@@ -194,8 +201,21 @@ function Checkout() {
                                  />
                                 <button onClick={applyCoupon} className='btn btn-success ms-1'>Apply</button>
                             </div>
-                                <button type="submit" className="btn btn-primary btn-rounded w-100 mt-2" style={{ backgroundColor: "#635BFF" }}>Pay Now (Stripe) <i className='fas fa-credit-card'></i></button>
-                        </section>
+                            {paymentLoading === true &&
+                            <form action={`${SERVER_URL}/api/v1/stripe-checkout/${order?.oid}/`}>
+                                <button onClick={payWithStripe} disabled type="submit" className="btn btn-primary btn-rounded w-100 mt-2" style={{ backgroundColor: "#635BFF" }}>
+                                    Processing... <i className='fas fa-spinner fa-spin'></i>
+                                </button>
+                            </form>
+                            }
+                            {paymentLoading === false &&
+                                <form action={`${SERVER_URL}/api/v1/stripe-checkout/${order?.oid}/`} method='POST'>
+                                    <button onClick={payWithStripe} type="submit" className="btn btn-primary btn-rounded w-100 mt-2" style={{ backgroundColor: "#635BFF" }}>
+                                        Pay Now <i className='fas fa-credit-card'></i>
+                                    </button>
+                                </form>
+                                }
+                            </section>
                     </div>
                 </div>
             </section>

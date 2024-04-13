@@ -347,7 +347,7 @@ class StripeCheckoutView(generics.CreateAPIView):
     queryset = CartOrder.objects.all()
 
     
-    def create(self):
+    def create(self, *args, **kwargs):
         order_oid = self.kwargs['order_oid']
         order = CartOrder.objects.get(oid=order_oid)
 
