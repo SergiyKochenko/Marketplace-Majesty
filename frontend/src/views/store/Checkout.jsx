@@ -1,18 +1,45 @@
 import React, { useEffect, useState } from 'react'
 import apiInstance from '../../utils/axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 function Checkout() {
     const [order, setOrder] = useState([])
+    const [couponCode, setCouponCode] = useState("")
 
     const param = useParams()
-    console.log(param.order_oid)
-
-    useEffect(() => {
+    
+    const fetchOrderData = () => {
         apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
             setOrder(res.data)
         })
+    }
+
+    useEffect(() => {
+        fetchOrderData()
     }, [])
+
+    console.log(couponCode)
+
+    const applyCoupon = async () => {
+        console.log(couponCode);
+        console.log(order.oid);
+
+    const formdata = new FormData()
+    formdata.append("order_oid", order.oid)
+    formdata.append("coupon_code", couponCode)
+
+    try {
+        const response = await apiInstance.post("coupon/", formdata)
+        fetchOrderData()
+        Swal.fire({
+            icon: response.data.icon,
+            title: response.data.message,
+          })
+    } catch (error) {
+        console.log(error)
+    }
+    }
 
   return (
 <main>
@@ -142,6 +169,12 @@ function Checkout() {
                                 <span>Servive Fee </span>
                                 <span>${order.service_fee}</span>
                             </div>
+                            {order.saved !== "0.00" &&
+                            <div className="d-flex text-danger fw-bold justify-content-between">
+                                <span>Discount </span>
+                                <span>-${order.saved}</span>
+                            </div>
+                            }
                             <hr className="my-4" />
                             <div className="d-flex justify-content-between fw-bold mb-5">
                                 <span>Total </span>
@@ -149,8 +182,17 @@ function Checkout() {
                             </div>
 
                             <div className="shadow p-3 d-flex mt-4 mb-4">
-                                <input readOnly value={""} name="couponCode" type="text" className='form-control' style={{ border: "dashed 1px gray" }} placeholder='Enter Coupon Code' id="" />
-                                <button className='btn btn-success ms-1'>Apply</button>
+                                <input 
+                                 
+                                name="couponCode" 
+                                type="text" 
+                                className='form-control' 
+                                style={{ border: "dashed 1px gray" }} 
+                                placeholder='Enter Dicount Coupon Here' 
+                                id=""
+                                onChange={(e) => setCouponCode(e.target.value)}
+                                 />
+                                <button onClick={applyCoupon} className='btn btn-success ms-1'>Apply</button>
                             </div>
                                 <button type="submit" className="btn btn-primary btn-rounded w-100 mt-2" style={{ backgroundColor: "#635BFF" }}>Pay Now (Stripe) <i className='fas fa-credit-card'></i></button>
                         </section>
