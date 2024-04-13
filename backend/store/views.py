@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.conf import settings
+from django.conf import settings # type: ignore
 
 
 
@@ -8,7 +8,7 @@ from store.serializers import  ProductSerializer, CategorySerializer, CartSerial
 from userauths.models import User
 from store.models import Cart, CartOrderItem, Notification, Product,Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
-import stripe
+import stripe # type: ignore
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -346,30 +346,31 @@ class StripeCheckoutView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     queryset = CartOrder.objects.all()
 
-    
     def create(self, *args, **kwargs):
         order_oid = self.kwargs['order_oid']
         order = CartOrder.objects.get(oid=order_oid)
 
         if not order:
             return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
         try:
             checkout_session = stripe.checkout.Session.create(
-                    customer_email=order.email,
-                    payment_method_types=['card'],
-                    line_items=[
-                        {
-                            'price_data': {
-                                'currency': 'usd',
-                                'product_data': {
-                                    'name': order.full_name,
-                                },
-                                'unit_amount': int(order.total * 100),
+                customer_email=order.email,
+                payment_method_types=['card'],
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': 'usd',
+                            'product_data': {
+                                'name': order.full_name,
                             },
-                            'quantity': 1,
-                        }
-                    ],
-                    mode='payment',
+                            'unit_amount': int(order.total * 100),
+                        },
+                        'quantity': 1,
+                    }
+                ],
+                mode='payment',
 
                     success_url='http://localhost:5173/payment-success/'+ order.oid +'?session_id={CHECKOUT_SESSION_ID}',
                     cancel_url='http://localhost:5173/payment-failed/?session_id={CHECKOUT_SESSION_ID}',
