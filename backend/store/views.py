@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.conf import settings
 
 
 
@@ -7,6 +8,9 @@ from store.serializers import  ProductSerializer, CategorySerializer, CartSerial
 from userauths.models import User
 from store.models import Cart, CartOrderItem, Notification, Product,Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 from rest_framework import generics, status
@@ -335,6 +339,50 @@ class CouponAPIView(generics.CreateAPIView):
                 return Response( {"message": "Order Item Does Not Exists", "icon":"error"}, status=status.HTTP_200_OK)
         else:
             return Response( {"message": "Coupon Does Not Exists", "icon":"error"}, status=status.HTTP_200_OK)
+        
+        
+class StripeCheckoutView(generics.CreateAPIView):
+    serializer_class = CartOrderSerializer
+    permission_classes = [AllowAny]
+    queryset = CartOrder.objects.all()
+
+    
+    def create(self):
+        order_oid = self.kwargs['order_oid']
+        order = CartOrder.objects.get(oid=order_oid)
+
+        if not order:
+            return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                    customer_email=order.email,
+                    payment_method_types=['card'],
+                    line_items=[
+                        {
+                            'price_data': {
+                                'currency': 'usd',
+                                'product_data': {
+                                    'name': order.full_name,
+                                },
+                                'unit_amount': int(order.total * 100),
+                            },
+                            'quantity': 1,
+                        }
+                    ],
+                    mode='payment',
+
+                    success_url='http://localhost:5173/payment-success/'+ order.oid +'?session_id={CHECKOUT_SESSION_ID}',
+                    cancel_url='http://localhost:5173/payment-failed/?session_id={CHECKOUT_SESSION_ID}',
+                )
+            
+            order.stripe_session_id = checkout_session.id 
+            order.save()
+
+            return redirect(checkout_session.url)
+        except stripe.error.StripeError as e:
+            return Response( {'error': f'Something went wrong when creating stripe checkout session: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
 
 
 

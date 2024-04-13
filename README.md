@@ -39,8 +39,8 @@ backend:
 - py manage.py migrate
 - pip install django-cors-headers==3.14.0
 - python -m pip install Pillow
-- py manage.py makemigrations
-- py manage.py migrate
+- pip install stripe
+- pip install environs
 
 =============================
 - frontend:
