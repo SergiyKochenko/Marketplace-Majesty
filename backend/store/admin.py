@@ -26,6 +26,9 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['title']
     inlines = [GalleryInline, SpecificationInline, SizeInline, ColorInline]
 
+class CartOrderAdmin(admin.ModelAdmin):
+    list_display = ['oid', 'payment_status', 'total']
+
 class CategoryAdmin(admin.ModelAdmin):
     list_editable = [ 'active']
     list_display = ['title', 'active']

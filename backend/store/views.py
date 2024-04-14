@@ -4,18 +4,27 @@ from django.conf import settings # type: ignore
 
 
 
-from store.serializers import  ProductSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer
+from store.serializers import  ProductSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer
 from userauths.models import User
 from store.models import Cart, CartOrderItem, Notification, Product,Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
 import stripe # type: ignore
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
 
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def send_notification(user=None, vendor=None, order=None, order_item=None):
+    Notification.objects.create(
+        user=user,
+        vendor=vendor,
+        order=order,
+        order_item=order_item
+    )
+
 
 
 class CategoryListAPIView(generics.ListAPIView):
@@ -403,26 +412,31 @@ class PaymentSuccessView(generics.CreateAPIView):
             session = stripe.checkout.Session.retrieve(session_id)
 
             if session.payment_status == "paid":
-                if order.payment_status == "processing":
+                if order.payment_status == "pending":
                     order.payment_status = 'paid'
                     order.save()
+                    
+                    # Send Notification to customers
+                    if order.buyer != None:
+                        send_notification(user=order.buyer, order=order)
 
-
-
+                    # Send Notification to vendors
+                    for o in order_items:
+                        send_notification(vendor=o.vendor, order=order, order_item=o)
 
 
 
 
                     
-                    return Response({"message":"Payment Successfull"})
+                    return Response( {"message": "Payment Successfull"})
                 else:
-                    return Response({"message":"Already Paid"})
+                    return Response( {"message": "Already Paid"}) 
             elif session.payment_status == "unpaid":
-                return Response({"message":"Your Invoice is Unpaid"})
+                return Response( {"message": "Your Invoice is Unpaid"})
             elif session.payment_status == "cancelled":
-                return Response({"message":"Your Invoice was cancelled"})
+                return Response( {"message": "Your Invoice was cancelled!"})
             else:
-                return Response({"message":"An Error Occured, Try Again..."})
+                return Response( {"message": "An Error Occured, Try Agan..."})
         else:
             session = None
         
