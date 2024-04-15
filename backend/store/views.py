@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
-from django.conf import settings # type: ignore
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
 
 
 
@@ -424,6 +427,45 @@ class PaymentSuccessView(generics.CreateAPIView):
                     for o in order_items:
                         send_notification(vendor=o.vendor, order=order, order_item=o)
 
+                        # Serd Email To Buyer
+                    context = {
+                        'order': order,
+                        'order_items': order_items,
+                        'vendor': o.vendor,
+                    }
+                    subject = "New Sale"
+                    text_body = render_to_string("email/vendor_sale.txt", context)
+                    html_body = render_to_string("email/vendor_sale.html", context)
+
+                    msg = EmailMultiAlternatives(
+                            subject=subject,
+                            from_email=settings.FROM_EMAIL,
+                            to=[o.vendor.user.email], 
+                            body=text_body
+                        )
+                    msg.attach_alternative(html_body, "text/html")
+                    msg.send()
+
+                    # Serd Email To Buyer
+                    context = {
+                        'order': order,
+                        'order_items': order_items
+                    }
+                    subject = "Order Placed Successfully"
+                    text_body = render_to_string("email/customer_order_confirmation.txt", context)
+                    html_body = render_to_string("email/customer_order_confirmation.html", context)
+
+                    msg = EmailMultiAlternatives(
+                            subject=subject,
+                            from_email=settings.FROM_EMAIL,
+                            to=[order.email], 
+                            body=text_body
+                        )
+                    msg.attach_alternative(html_body, "text/html")
+                    msg.send()
+
+
+
 
 
 
@@ -439,9 +481,4 @@ class PaymentSuccessView(generics.CreateAPIView):
                 return Response( {"message": "An Error Occured, Try Agan..."})
         else:
             session = None
-        
-
-
-
-
-
+    

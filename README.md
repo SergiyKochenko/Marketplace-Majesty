@@ -41,6 +41,7 @@ backend:
 - python -m pip install Pillow
 - pip install stripe
 - pip install environs
+- pip install django-anymail
 
 =============================
 - frontend:
