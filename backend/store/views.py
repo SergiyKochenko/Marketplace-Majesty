@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 
 
 
-from store.serializers import  ProductSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer
+from store.serializers import  ProductSerializer, ReviewSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer
 from userauths.models import User
 from store.models import Cart, CartOrderItem, Notification, Product,Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
@@ -355,8 +355,8 @@ class CouponAPIView(generics.CreateAPIView):
         
 class StripeCheckoutView(generics.CreateAPIView):
     serializer_class = CartOrderSerializer
-    permission_classes = [AllowAny]
     queryset = CartOrder.objects.all()
+    permission_classes = [AllowAny]
 
     def create(self, *args, **kwargs):
         order_oid = self.kwargs['order_oid']
@@ -399,8 +399,8 @@ class StripeCheckoutView(generics.CreateAPIView):
 
 class PaymentSuccessView(generics.CreateAPIView):
     serializer_class = CartOrderSerializer
-    permission_classes = [AllowAny]
     queryset = CartOrder.objects.all()
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         payload = request.data
@@ -481,4 +481,17 @@ class PaymentSuccessView(generics.CreateAPIView):
                 return Response( {"message": "An Error Occured, Try Agan..."})
         else:
             session = None
+    
+
+class ReviewListAPIView(generics.ListAPIView):
+    queryset = CartOrder.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        product_id = self.kwargs['product_id']
+
+        product = Product.objects.get(id=product_id)
+        reviews = Review.objects.filter(product=product)
+        return reviews
     

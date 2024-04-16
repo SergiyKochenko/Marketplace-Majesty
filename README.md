@@ -57,6 +57,7 @@ backend:
 - yarn add zustand@4.4.4
 - yarn add simple-zustand-devtools
 - yarn add sweetalert2
+- yarn add @paypal/react-paypal-js
 ----------
 - yarn dev
 ----------
