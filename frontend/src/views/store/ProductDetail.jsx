@@ -5,6 +5,7 @@ import apiInstance from '../../utils/axios'
 import GetCurrentAddress from '../plugin/UserCountry'
 import UserData from '../plugin/UserData'
 import CartID from '../plugin/CardID'
+import moment from 'moment'
 
 function ProductDetail() {
     const [product, setProduct] = useState({})
@@ -16,6 +17,8 @@ function ProductDetail() {
 
     const [colorValue, setColorValue] = useState("No Color")
     const [sizeValue, setSizeValue] = useState("No Size")
+
+    const [reviews, setReviews] = useState([])
 
     const param = useParams()
     const currentAddress = GetCurrentAddress()
@@ -71,6 +74,26 @@ function ProductDetail() {
             console.log(error);
         }
     };
+
+    const fetchReviewData = () => {
+       if (product !== null) {
+        apiInstance.get(`reviews/${product?.id}/`).then((res) => {
+            setReviews(res.data)
+        })
+       }
+    }
+
+    useEffect(() => {
+        const fetchReviewData = async () => {
+            if (product) {
+             await apiInstance.get(`reviews/${product?.id}/`).then((res) => {
+                 setReviews(res.data)
+                 console.log(res.data)
+             })
+            }
+         }
+        fetchReviewData()
+    }, [product])
 
     return (
     <main className="mb-4 mt-4">
@@ -390,51 +413,67 @@ function ProductDetail() {
                                 </button>
                             </form>
                         </div>
+
                         {/* Column 2: Display existing reviews */}
                         <div className="col-md-6">
                             <h2>Existing Reviews</h2>
-                            <div className="card mb-3">
-                                <div className="row g-0">
+                            <div className="mb-3">
+                                {reviews?.map((r, index) => (
+                                <div className="row border p-2 g-0 mb-3" key={index}>
                                     <div className="col-md-3">
                                         <img
-                                            src="https://"
+                                            src={r.profile?.image}
                                             alt="User Image"
                                             className="img-fluid"
                                         />
                                     </div>
                                     <div className="col-md-9">
                                         <div className="card-body">
-                                            <h5 className="card-title">User 1</h5>
-                                            <p className="card-text">August 10, 2023</p>
+                                            <h5 className="card-title">{r.profile.full_name}</h5>
+                                            <p className="card-text">{moment(r.date).format("MMM D, YYYY")}</p>
                                             <p className="card-text">
-                                                This is a great product! I'm really satisfied with
-                                                it.
+                                                {r.review}
+                                                <br/>
+                                                {r.rating === 1 &&
+                                                    <i className="fas fa-star"></i>
+                                                }
+                                                {r.rating === 2 &&
+                                                    <>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    </>
+                                                }
+                                                {r.rating === 3 &&
+                                                    <>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    </>
+                                                }
+                                                {r.rating === 4 &&
+                                                    <>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    </>
+                                                }
+                                                {r.rating === 5 &&
+                                                    <>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    </>
+                                                }
                                             </p>
                                         </div>
                                     </div>
                                 </div>
+                                ))}
                             </div>
-                            <div className="card mb-3">
-                                <div className="row g-0">
-                                    <div className="col-md-3">
-                                        <img
-                                            src="https://"
-                                            alt="User Image"
-                                            className="img-fluid"
-                                        />
-                                    </div>
-                                    <div className="col-md-9">
-                                        <div className="card-body">
-                                            <h5 className="card-title">User 2</h5>
-                                            <p className="card-text">August 15, 2023</p>
-                                            <p className="card-text">
-                                                The quality of this product exceeded my
-                                                expectations!
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                             {/* More reviews can be added here */}
                         </div>
                     </div>
