@@ -19,6 +19,7 @@ function ProductDetail() {
     const [sizeValue, setSizeValue] = useState("No Size")
 
     const [reviews, setReviews] = useState([])
+    const [createReview, setCreateReview] = useState({ user_id: 0, product_id: product?.id, review: "", rating: 0, })
 
     const param = useParams()
     const currentAddress = GetCurrentAddress()
@@ -82,7 +83,7 @@ function ProductDetail() {
         })
        }
     }
-
+    
     useEffect(() => {
         const fetchReviewData = async () => {
             if (product) {
@@ -94,6 +95,32 @@ function ProductDetail() {
          }
         fetchReviewData()
     }, [product])
+
+    
+    const handleReviewChange = (event) => {
+        setCreateReview({
+            ...createReview,
+            [event.target.name]: event.target.value
+        })
+        console.log(createReview.review)
+        console.log(createReview.rating)
+    }
+
+    const handleReviewSubmit = (e) => {
+        e.preventDefault()
+
+        const formdata = new FormData()
+        formdata.append('user_id', userData?.user_id)
+        formdata.append('product_id', product?.id)
+        formdata.append('rating', createReview.rating)
+        formdata.append('review', createReview.review)
+
+        apiInstance.post(`reviews/${product?.id}/`, formdata).then((res) => {
+            console.log(res.data);
+            fetchReviewData()
+
+    })
+}
 
     return (
     <main className="mb-4 mt-4">
@@ -383,35 +410,37 @@ function ProductDetail() {
                         {/* Column 1: Form to create a new review */}
                         <div className="col-md-6">
                             <h2>Create a New Review</h2>
-                            <form>
-                                <div className="mb-3">
-                                    <label htmlFor="username" className="form-label">
-                                        Rating
-                                    </label>
-                                    <select name="" className='form-select' id="">
-                                        <option value="1">1 Star</option>
-                                        <option value="1">2 Star</option>
-                                        <option value="1">3 Star</option>
-                                        <option value="1">4 Star</option>
-                                        <option value="1">5 Star</option>
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="reviewText" className="form-label">
-                                        Review
-                                    </label>
-                                    <textarea
-                                        className="form-control"
-                                        id="reviewText"
-                                        rows={4}
-                                        placeholder="Write your review"
-                                        defaultValue={""}
-                                    />
-                                </div>
-                                <button type="submit" className="btn btn-primary">
-                                    Submit Review
-                                </button>
-                            </form>
+                            <form onSubmit={handleReviewSubmit}>
+                                                <div className="mb-3">
+                                                    <label htmlFor="username" className="form-label">
+                                                        Rating
+                                                    </label>
+                                                    <select onChange={handleReviewChange} name="rating" className='form-select' id="">
+                                                        <option value="1">★</option>
+                                                        <option value="2">★★</option>
+                                                        <option value="3">★★★</option>
+                                                        <option value="4">★★★★</option>
+                                                        <option value="5">★★★★★</option>
+                                                    </select>
+                                                </div>
+                                                <div className="mb-3">
+                                                    <label htmlFor="reviewText" className="form-label">
+                                                        Review
+                                                    </label>
+                                                    <textarea
+                                                        className="form-control"
+                                                        id="reviewText"
+                                                        rows={4}
+                                                        placeholder="Write your review"
+                                                        onChange={handleReviewChange}
+                                                        name="review"
+                                                        value={createReview.review}
+                                                    />
+                                                </div>
+                                                <button type="submit" className="btn btn-primary">
+                                                    Submit Review
+                                                </button>
+                                            </form>
                         </div>
 
                         {/* Column 2: Display existing reviews */}
@@ -492,17 +521,18 @@ function ProductDetail() {
                         <div className="col-md-6">
                             <h2>Ask a Question</h2>
                             <form>
-                                <div className="mb-3">
-                                    <label htmlFor="askerName" className="form-label">
-                                        Your Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="askerName"
-                                        placeholder="Enter your name"
-                                    />
-                                </div>
+                            <div className="mb-3">
+                            <label htmlFor="username" className="form-label">
+                                Rating
+                            </label>
+                            <select onChange={handleReviewChange} name="rating" className='form-select' id="">
+                                <option value="1">★</option>
+                                <option value="2">★★</option>
+                                <option value="3">★★★</option>
+                                <option value="4">★★★★</option>
+                                <option value="5">★★★★★</option>
+                            </select>
+                        </div>
                                 <div className="mb-3">
                                     <label htmlFor="questionText" className="form-label">
                                         Question

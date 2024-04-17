@@ -4,6 +4,16 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 
+# -----------
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+
+from store.models import Product, Review
+from userauths.models import User
+from .serializers import ReviewSerializer
+
+# -----------------
 
 
 
@@ -483,8 +493,7 @@ class PaymentSuccessView(generics.CreateAPIView):
             session = None
     
 
-class ReviewListAPIView(generics.ListAPIView):
-    queryset = CartOrder.objects.all()
+class ReviewListAPIView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [AllowAny]
 
