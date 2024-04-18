@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import apiInstance from '../../utils/axios';
 import GetCurrentAddress from '../plugin/UserCountry';
 import UserData from '../plugin/UserData';
 import CartID from '../plugin/CardID';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { CartContext } from '../plugin/Context';
 
 const Toast =Swal.mixin({
     toast: true,
@@ -27,6 +28,8 @@ function Products() {
     const [selectedColors, setSelectedColors] = useState({});
 
     const [selectedSize, setSelectedSize] = useState({});
+
+    const [cartCount, setCartCount] = useContext(CartContext)
 
     const currentAddress = GetCurrentAddress()
     const userData = UserData()
@@ -81,6 +84,11 @@ function Products() {
             Toast.fire({
                 icon: "success",
                 title: response.data.message
+            })
+
+            const url = userData ? `cart-list/${cart_id}/${userData?.user_id}/` : `cart-list/${cart_id}/`
+            apiInstance.get(url).then((res) => {
+                setCartCount(res.data.length)
             })
     };
  
