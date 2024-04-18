@@ -27,8 +27,9 @@ urlpatterns = [
     path('cart-delete/<str:cart_id>/<int:item_id>/', store_views.CartItemDeleteAPIView.as_view()),
     path('create-order/', store_views.CreateOrderAPIView.as_view()),
     path('checkout/<order_oid>/', store_views.CheckoutView.as_view()),
-    path('coupon/', store_views.CouponAPIView.as_view(), name='coupon'),
+    path('coupon/', store_views.CouponAPIView.as_view()),
     path('reviews/<product_id>/', store_views.ReviewListAPIView.as_view()),
+    path('search/', store_views.SearchProductAPIView.as_view()),
 
     # Payment Endpoints
     path('stripe-checkout/<order_oid>/', store_views.StripeCheckoutView.as_view()),

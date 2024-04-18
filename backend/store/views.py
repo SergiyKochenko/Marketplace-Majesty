@@ -524,3 +524,11 @@ class ReviewListAPIView(generics.ListCreateAPIView):
     
         return Response( {"message": "Review Created Successfully."}, status=status.HTTP_200_OK)
     
+class SearchProductAPIView(generics.ListCreateAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        query = self.request.GET.get("query")
+        products = Product.objects.filter(status="published", title__icontains=query)
+        return products
