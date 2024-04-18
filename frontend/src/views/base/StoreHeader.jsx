@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {  useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/auth'
 
 function StoreHeader() {
@@ -8,7 +8,18 @@ function StoreHeader() {
     state.user,
   ])
 
+  const [search, setSearch] = useState("")
 
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+    console.log(search);
+}
+
+  const navigate = useNavigate()
+
+  const handleSearchSubmit = () => {
+    navigate(`/search?query=${search}`)
+}
 
   return (
     <div>
@@ -159,7 +170,7 @@ function StoreHeader() {
             </ul>
             <div className="d-flex">
               <input
-                onChange={null}
+                onChange={handleSearchChange}
                 name="search"
                 className="form-control me-2"
                 type="text"
@@ -167,7 +178,7 @@ function StoreHeader() {
                 aria-label="Search"
               />
               <button
-                onClick={null}
+                onClick={handleSearchSubmit}
                 className="btn btn-outline-success me-2"
                 type="submit"
               >
