@@ -26,9 +26,6 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['title']
     inlines = [GalleryInline, SpecificationInline, SizeInline, ColorInline]
 
-class CartOrderAdmin(admin.ModelAdmin):
-    list_display = ['oid', 'payment_status', 'total']
-
 class CategoryAdmin(admin.ModelAdmin):
     list_editable = [ 'active']
     list_display = ['title', 'active']
@@ -37,7 +34,7 @@ class CartOrderAdmin(admin.ModelAdmin):
     search_fields = ['oid', 'full_name', 'email', 'mobile']
     list_editable = ['order_status', 'payment_status']
     list_filter = ['payment_status', 'order_status']
-    list_display = ['oid', 'payment_status', 'order_status', 'sub_total', 'shipping_amount', 'tax_fee', 'service_fee' ,'total', 'saved' ,'date']
+    list_display = ['oid', 'buyer', 'payment_status', 'order_status', 'sub_total', 'shipping_amount', 'tax_fee', 'service_fee' ,'total', 'saved' ,'date']
 
 class CartAdmin(admin.ModelAdmin):
     list_display = ['product', 'cart_id', 'qty', 'price', 'sub_total' , 'shipping_amount', 'service_fee', 'tax_fee', 'total', 'country', 'size', 'color', 'date']

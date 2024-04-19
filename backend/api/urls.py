@@ -2,6 +2,7 @@ from django.urls import path
 
 from userauths import views as userauths_views
 from store import views as store_views
+from customer import views as customer_views
 
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -34,4 +35,8 @@ urlpatterns = [
     # Payment Endpoints
     path('stripe-checkout/<order_oid>/', store_views.StripeCheckoutView.as_view()),
     path('payment-success/<order_oid>/', store_views.PaymentSuccessView.as_view()),
+
+    # Customer Endpoints
+    path('customer/orders/<user_id>/', customer_views.OrdersAPIView.as_view()),
+    path('customer/order/<user_id>/<order_oid>/', customer_views.OrderDetailAPIView.as_view()),
 ]

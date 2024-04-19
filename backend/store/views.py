@@ -3,26 +3,11 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-
-# -----------
-
-from rest_framework import generics, status
-from rest_framework.response import Response
-
-from store.models import Product, Review
-from userauths.models import User
-from .serializers import ReviewSerializer
-
-# -----------------
-
-
-
 from store.serializers import  ProductSerializer, ReviewSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer
 from userauths.models import User
-from store.models import Cart, CartOrderItem, Notification, Product,Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
+from store.models import Cart, CartOrderItem, Notification, Product, Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
 import stripe # type: ignore
-
 
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
