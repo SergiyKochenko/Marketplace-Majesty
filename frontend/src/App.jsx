@@ -18,6 +18,7 @@ import { CartContext } from './views/plugin/Context';
 import CartID from './views/plugin/CardID';
 import UserData from './views/plugin/UserData';
 import apiInstance from './utils/axios';
+import Account from './views/customer/Account';
 
 
 function App() {
@@ -53,6 +54,10 @@ function App() {
       <Route path="/checkout/:order_oid/" element={<Checkout />} />
       <Route path="/payment-success/:order_oid/" element={<PaymentSuccess />} />
       <Route path="/search" element={<Search />} />
+
+      {/* Customer Routs */}
+      <Route path="/customer/account/" element={<Account />} />
+
     </Routes>
     <StoreFooter/>
       </BrowserRouter>
