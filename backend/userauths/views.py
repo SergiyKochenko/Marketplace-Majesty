@@ -9,7 +9,7 @@ from rest_framework import status
 
 
 from userauths.models import Profile, User
-from userauths.serializer import MyTokenObtainPairSerializer, RegisterSerializer, UserSerializer
+from userauths.serializer import MyTokenObtainPairSerializer, ProfileSerializer, RegisterSerializer, UserSerializer
 
 import random
 import shortuuid
@@ -54,7 +54,7 @@ class PasswordRestEmailVerify(generics.RetrieveAPIView):
 
 
 class PasswordChangeView(generics.CreateAPIView):
-    permission_classes = (AllowAny,)
+    permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
     def create(self, request):
@@ -72,3 +72,17 @@ class PasswordChangeView(generics.CreateAPIView):
             return Response( {"message": "Password Changed Successfully"}, status=status.HTTP_201_CREATED)
         else:
             return Response( {"message": "User Does Not Exists"}, status=status.HTTP_400_NOT_FOUND)
+        
+
+class ProfileView(generics.RetrieveAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        user_id = self.kwargs['user_id']
+
+        user = User.objects.get(id=user_id)
+        profile = Profile.objects.get(user=user)
+        return profile
+
+
