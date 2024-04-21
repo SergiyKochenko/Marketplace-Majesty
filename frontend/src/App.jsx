@@ -21,6 +21,7 @@ import apiInstance from './utils/axios';
 import Account from './views/customer/Account';
 import PrivateRoute from './layout/PrivateRoute';
 import MainWrapper from './layout/MainWrapper';
+import Orders from './views/customer/Orders';
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
 
               {/* Customer Routs */}
               <Route path="/customer/account/" element={<PrivateRoute><Account /></PrivateRoute>} />
+              <Route path="/customer/orders/" element={<PrivateRoute><Orders /></PrivateRoute>} />
 
             </Routes>
           </MainWrapper>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import apiInstance from "../../utils/axios";
 import UserData from "../plugin/UserData";
+import { Link } from "react-router-dom";
 
 function Sidebar() {
   
@@ -32,12 +33,16 @@ function Sidebar() {
         <ol className="list-group">
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              <div className="fw-bold">Account</div>
+              <div className="fw-bold">
+                <Link to='/customer/account/' className="text-dark">Account</Link>
+              </div>
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              <div className="fw-bold">Orders</div>
+              <div className="fw-bold">
+                <Link to='/customer/orders/' className="text-dark">Orders</Link>
+              </div>
             </div>
             <span className="badge bg-primary rounded-pill">14</span>
           </li>
