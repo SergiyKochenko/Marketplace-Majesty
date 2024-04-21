@@ -19,6 +19,8 @@ import CartID from './views/plugin/CardID';
 import UserData from './views/plugin/UserData';
 import apiInstance from './utils/axios';
 import Account from './views/customer/Account';
+import PrivateRoute from './layout/PrivateRoute';
+import MainWrapper from './layout/MainWrapper';
 
 
 function App() {
@@ -39,27 +41,29 @@ function App() {
     <CartContext.Provider value={[cartCount, setCartCount]}>
 
       <BrowserRouter>
-  <StoreHeader />
-    <Routes>
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/logout' element={<Logout />} />
-      <Route path='/dashboard' element={<Dashboard />} />
-      <Route path='/forgot-password' element={<ForgotPassword />} />
-      <Route path='/create-new-password' element={<CreatePassword />} />
+        <StoreHeader />
+          <MainWrapper>
+            <Routes>
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/logout' element={<Logout />} />
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/forgot-password' element={<ForgotPassword />} />
+              <Route path='/create-new-password' element={<CreatePassword />} />
 
-      <Route path="/" element={<Products />} />
-      <Route path="/detail/:slug/" element={<ProductDetail />} />
-      <Route path="/cart/" element={<Cart />} />
-      <Route path="/checkout/:order_oid/" element={<Checkout />} />
-      <Route path="/payment-success/:order_oid/" element={<PaymentSuccess />} />
-      <Route path="/search" element={<Search />} />
+              <Route path="/" element={<Products />} />
+              <Route path="/detail/:slug/" element={<ProductDetail />} />
+              <Route path="/cart/" element={<Cart />} />
+              <Route path="/checkout/:order_oid/" element={<Checkout />} />
+              <Route path="/payment-success/:order_oid/" element={<PaymentSuccess />} />
+              <Route path="/search" element={<Search />} />
 
-      {/* Customer Routs */}
-      <Route path="/customer/account/" element={<Account />} />
+              {/* Customer Routs */}
+              <Route path="/customer/account/" element={<PrivateRoute><Account /></PrivateRoute>} />
 
-    </Routes>
-    <StoreFooter/>
+            </Routes>
+          </MainWrapper>
+        <StoreFooter/>
       </BrowserRouter>
 
     </CartContext.Provider>
