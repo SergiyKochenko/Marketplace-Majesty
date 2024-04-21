@@ -130,8 +130,6 @@ function Orders() {
                   </div>
                 </div>
               </section>
-              {/* Section: Summary */}
-              {/* Section: MSC */}
               <section className="">
                 <div className="row rounded shadow p-3">
                   <div className="col-lg-12 mb-4 mb-lg-0 h-100">
@@ -164,12 +162,12 @@ function Orders() {
                             <span className="fw-normal mb-1">${o.total}</span>
                           </td>
                           <td>
-                            <button
-                              type="button"
+                            <Link
+                              to={`/customer/orders/${o.oid}/`}
                               className="btn btn-link btn-sm btn-rounded"
                             >
                               View <i className="fas fa-eye" />
-                            </button>
+                            </Link>
                           </td>
                         </tr>
                         ))}
