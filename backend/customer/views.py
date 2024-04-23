@@ -79,7 +79,7 @@ class CustomerNotification(generics.ListAPIView):
         user_id = self.kwargs['user_id']
 
         user = User.objects.get(id=user_id)
-        return Notification.objects.filter(user=user)
+        return Notification.objects.filter(user=user, seen=False)
     
 class MarkCustomerNotificationAsSeen(generics.RetrieveAPIView):
     serializer_class = NotificationSerializer

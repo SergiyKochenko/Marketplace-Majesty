@@ -11,7 +11,6 @@ function Sidebar() {
   useEffect(() => {
       apiInstance.get(`user/profile/${userData?.user_id}/`).then((res) => {
         setProfile(res.data);
-        console.log(profile)
       });
   }, []);
 
@@ -55,7 +54,9 @@ function Sidebar() {
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              <div className="fw-bold">Notification</div>
+            <div className="fw-bold">
+                <Link to={'/customer/notifications/'} className="text-dark">Notifications</Link>
+            </div>
             </div>
             <span className="badge bg-primary rounded-pill">14</span>
           </li>
