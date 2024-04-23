@@ -51,11 +51,14 @@ class WishlistAPIView(generics.ListCreateAPIView):
         wishlists = Wishlist.objects.filter(user=user)
         return wishlists
     
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         payload = request.data
 
         product_id = payload['product_id']
         user_id = payload['user_id']
+
+        print("product_id ====", product_id)
+        print("user_id ====", user_id)
 
         product = Product.objects.get(id=product_id)
         user = User.objects.get(id=user_id)

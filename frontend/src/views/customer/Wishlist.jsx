@@ -3,17 +3,41 @@ import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import Sidebar from './Sidebar'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function Wishlist() {
     const [wishlist, setWishlist] = useState([])
 
     const userData = UserData()
 
-    useEffect(() => {
-        apiInstance.get(`customer/wishlist/${userData?.user_id}/`).then((res) => {
+    const fetchWishlist = async () => {
+        await apiInstance.get(`customer/wishlist/${userData?.user_id}/`).then((res) => {
             setWishlist(res.data);
         })
+    }
+
+    useEffect(() => {
+        fetchWishlist()
     }, [])
+
+    const addToWishlist = async (productId, userId) => {
+        try {
+            const formdata = new FormData()
+        formdata.append("product_id", productId)
+        formdata.append("user_id", userId)
+        
+        const response = await apiInstance.post(`customer/wishlist/${userId}/`, formdata)
+        console.log(response.data);
+        fetchWishlist()
+
+        Swal.fire({
+            icon: "success",
+            title: response.data.message,
+        })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <main className="mt-5">
@@ -77,7 +101,11 @@ function Wishlist() {
                                                                 <h6 className="mb-3 text-muted ms-2"><strike>${w.product?.old_price}</strike></h6>
                                                                 </div>
 
-                                                                <button type="button" className="btn btn-danger px-3 me-1 mb-1">
+                                                                <button 
+                                                                    type="button" 
+                                                                    className="btn btn-danger px-3 me-1 mb-1"
+                                                                    onClick={() => addToWishlist(w.product.id, userData?.user_id)}
+                                                                >
                                                                     <i className="fas fa-heart" />
                                                                 </button>
                                                             </div>
@@ -86,7 +114,7 @@ function Wishlist() {
                                                 ))}
 
                                                 {/* Show This if there are no item in wishlist */}
-                                                {wishlist.length === 0 && <h6 className='container'>Your wishlist is Empty </h6>}
+                                                {wishlist.length === 0 && <h6 className='container p-4'>Your wishlist is Empty </h6>}
 
                                             </div>
                                         </section>

@@ -105,6 +105,24 @@ function Products() {
 
     }, []);
 
+    const addToWishlist = async (productId, userId) => {
+        try {
+            const formdata = new FormData()
+        formdata.append("product_id", productId)
+        formdata.append("user_id", userId)
+        
+        const response = await apiInstance.post(`customer/wishlist/${userId}/`, formdata)
+        console.log(response.data);
+
+        Swal.fire({
+            icon: "success",
+            title: response.data.message,
+        })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
   return (
     <>
   <main className="mt-5">
@@ -232,6 +250,7 @@ function Products() {
                         <button
                             type="button"
                             className="btn btn-danger px-3 me-1 ms-2"
+                            onClick={() => addToWishlist(p.id, userData?.user_id)}
                         >
                             <i className="fas fa-heart" />
                         </button>

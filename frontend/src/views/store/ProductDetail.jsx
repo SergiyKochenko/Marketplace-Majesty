@@ -7,6 +7,7 @@ import UserData from '../plugin/UserData'
 import CartID from '../plugin/CardID'
 import moment from 'moment'
 import { CartContext } from '../plugin/Context'
+import Swal from 'sweetalert2'
 
 
 function ProductDetail() {
@@ -131,7 +132,25 @@ function ProductDetail() {
             fetchReviewData()
 
     })
-}
+    }
+
+    const addToWishlist = async (productId, userId) => {
+        try {
+            const formdata = new FormData()
+        formdata.append("product_id", productId)
+        formdata.append("user_id", userId)
+        
+        const response = await apiInstance.post(`customer/wishlist/${userId}/`, formdata)
+        console.log(response.data);
+
+        Swal.fire({
+            icon: "success",
+            title: response.data.message,
+        })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
     <main className="mb-4 mt-4">
@@ -289,7 +308,7 @@ function ProductDetail() {
                                 <i className="fas fa-cart-plus me-2" />
                                  Add to cart
                             </button>
-                            <button href="#!" type="button" className="btn btn-danger btn-floating" data-mdb-toggle="tooltip" title="Add to wishlist">
+                            <button href="#!" type="button" className="btn btn-danger btn-floating" data-mdb-toggle="tooltip" title="Add to wishlist" onClick={() => addToWishlist(product.id, userData?.user_id)}>
                                 <i className="fas fa-heart" />
                             </button>
                         </div>
