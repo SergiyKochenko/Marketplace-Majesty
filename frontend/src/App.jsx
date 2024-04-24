@@ -26,6 +26,7 @@ import OrderDetail from './views/customer/OrderDetail';
 import Wishlist from './views/customer/Wishlist';
 import CustomerNotification from './views/customer/CustomerNotification';
 import CustomerSettings from './views/customer/Settings';
+import Invoice from './views/customer/Invoice';
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
               <Route path="/customer/wishlist/" element={<PrivateRoute><Wishlist /></PrivateRoute>} />
               <Route path="/customer/notifications/" element={<PrivateRoute><CustomerNotification /></PrivateRoute>} />
               <Route path="/customer/settings/" element={<PrivateRoute><CustomerSettings /></PrivateRoute>} />
+              <Route path="/customer/invoice/:order_oid/" element={<PrivateRoute><Invoice /></PrivateRoute>} />
 
             </Routes>
           </MainWrapper>

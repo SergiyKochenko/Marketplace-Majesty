@@ -163,10 +163,12 @@ function Orders() {
                           </td>
                           <td>
                             <Link
-                              to={`/customer/orders/${o.oid}/`}
-                              className="btn btn-link btn-sm btn-rounded"
-                            >
+                              to={`/customer/orders/${o.oid}/`} className="btn btn-link btn-sm btn-rounded" >
                               View <i className="fas fa-eye" />
+                            </Link>
+                            <Link
+                              to={`/customer/invoice/${o.oid}/`} className="btn btn-link btn-sm btn-rounded" >
+                              Invoice <i className="fas fa-file-invoice" />
                             </Link>
                           </td>
                         </tr>
