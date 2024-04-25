@@ -47,4 +47,6 @@ urlpatterns = [
 
     # Vendor Dashboard
     path('vendor/stats/<vendor_id>/', vendor_views.DashboardStatsAPIView.as_view()),
+    path('vendor-orders-chart/<vendor_id>/', vendor_views.MonthlyOrderChartAPIView),
+    path('vendor-product-chart/<vendor_id>/', vendor_views.MonthlyProductsChartAPIView),
 ]
