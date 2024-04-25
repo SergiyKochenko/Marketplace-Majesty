@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Register from './views/auth/register';
 import Login from './views/auth/login'
-import Dashboard from './views/auth/dashboard';
+
 import Logout from './views/auth/logout';
 import ForgotPassword from './views/auth/forgotPassword';
 import CreatePassword from './views/auth/createPassword';
@@ -27,6 +27,7 @@ import Wishlist from './views/customer/Wishlist';
 import CustomerNotification from './views/customer/CustomerNotification';
 import CustomerSettings from './views/customer/Settings';
 import Invoice from './views/customer/Invoice';
+import Dashboard from './views/vendor/Dashboard';
 
 
 function App() {
@@ -53,7 +54,6 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/logout' element={<Logout />} />
-              <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/forgot-password' element={<ForgotPassword />} />
               <Route path='/create-new-password' element={<CreatePassword />} />
 
@@ -72,6 +72,9 @@ function App() {
               <Route path="/customer/notifications/" element={<PrivateRoute><CustomerNotification /></PrivateRoute>} />
               <Route path="/customer/settings/" element={<PrivateRoute><CustomerSettings /></PrivateRoute>} />
               <Route path="/customer/invoice/:order_oid/" element={<PrivateRoute><Invoice /></PrivateRoute>} />
+
+              {/* Vendor Routs */}
+              <Route path="/vendor/dashboard/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 
             </Routes>
           </MainWrapper>
