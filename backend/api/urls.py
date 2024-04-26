@@ -61,5 +61,9 @@ urlpatterns = [
     path('vendor-coupon-list/<vendor_id>/', vendor_views.CouponListCreateAPIView.as_view()),
     path('vendor-coupon-detail/<vendor_id>/<coupon_id>/', vendor_views.CouponDetailAPIView.as_view()),
     path('vendor-coupon-stats/<vendor_id>/', vendor_views.CouponStatsAPIView.as_view()),
+    path('vendor-unseen-noti/<vendor_id>/', vendor_views.NotificationUnSeenListAPIView.as_view()),
+    path('vendor-seen-noti/<vendor_id>/', vendor_views.NotificationSeenListAPIView.as_view()),
+    path('vendor-noti-summery/<vendor_id>/', vendor_views.NotificationSummaryAPIView.as_view()),
+    path('vendor-noti-mark-as-seen/<vendor_id>/', vendor_views.NotificationVendorMarkAsSeen.as_view()),
 
 ]

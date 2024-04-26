@@ -216,3 +216,8 @@ class EarningSerializer(serializers.Serializer):
 class CouponSummarySerializer(serializers.Serializer):
     total_coupons = serializers.IntegerField()
     active_coupons = serializers.IntegerField()
+
+class NotificationSummarySerializer(serializers.Serializer):
+    un_read_noti = serializers.IntegerField()
+    read_noti = serializers.IntegerField()
+    all_noti = serializers.IntegerField()
