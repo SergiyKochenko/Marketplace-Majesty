@@ -58,6 +58,8 @@ backend:
 - yarn add simple-zustand-devtools
 - yarn add sweetalert2
 - yarn add @paypal/react-paypal-js
+- yarn add chart.js
+- yarn add react-chartjs-2
 ----------
 - yarn dev
 ----------
