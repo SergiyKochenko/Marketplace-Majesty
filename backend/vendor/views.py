@@ -1,3 +1,4 @@
+from userauths.models import Profile, User
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -6,7 +7,8 @@ from django.db import models
 from django.db.models.functions import ExtractMonth
 
 
-from store.serializers import  ProductSerializer, NotificationSummarySerializer, EarningSerializer, ReviewSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer, WishlistSerializer, SummarySerializer, CouponSummarySerializer
+from userauths.serializer import ProfileSerializer
+from store.serializers import  ProductSerializer, NotificationSummarySerializer, EarningSerializer, ReviewSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer, VendorSerializer, WishlistSerializer, SummarySerializer, CouponSummarySerializer
 from userauths.models import User
 from store.models import Cart, CartOrderItem, Notification, Product, Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
@@ -302,6 +304,36 @@ class NotificationVendorMarkAsSeen(generics.RetrieveAPIView):
         noti.seen == True
         noti.save()
         return noti
+    
+class VendorProfileUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [AllowAny]
+
+class ShopUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Vendor.objects.all()
+    serializer_class = VendorSerializer
+    permission_classes = [AllowAny]
+
+class ShopAPIView(generics.RetrieveAPIView):
+    serializer_class = VendorSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        vendor_slug = self.kwargs['vendor_slug']
+        return Vendor.objects.get(slug=vendor_slug)
+    
+class ShopProductsAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        vendor_slug = self.kwargs['vendor_slug']
+        vendor = Vendor.objects.get(slug=vendor_slug)
+        return Product.objects.filter(vendor=vendor)
+
+       
+
 
 
 
