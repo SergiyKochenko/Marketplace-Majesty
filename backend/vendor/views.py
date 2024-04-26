@@ -6,12 +6,13 @@ from django.db import models
 from django.db.models.functions import ExtractMonth
 
 
-from store.serializers import  ProductSerializer, ReviewSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer, WishlistSerializer, SummarySerializer
+from store.serializers import  ProductSerializer, EarningSerializer, ReviewSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer, WishlistSerializer, SummarySerializer
 from userauths.models import User
 from store.models import Cart, CartOrderItem, Notification, Product, Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
 import stripe
 from vendor.models import Vendor
+from datetime import datetime, timedelta
 
 from rest_framework.decorators import api_view
 from rest_framework import generics, status
@@ -100,6 +101,91 @@ class RevenueAPIView(generics.ListAPIView):
 
         return CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid").aggregate(
             total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+    
+class FilterProductAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        vendor_id = self.kwargs['vendor_id']
+        vendor = Vendor.objects.get(id=vendor_id)
+
+        filter = self.request.GET.get('filter')
+
+        if filter == "published":
+            products = Product.objects.filter(vendor=vendor, status="published")
+        elif filter == "in-review":
+            products = Product.objects.filter(vendor=vendor, status="in-review")
+        elif filter == "draft":
+            products = Product.objects.filter(vendor=vendor, status="draft")
+        elif filter == "disabled":
+            products = Product.objects.filter(vendor=vendor, status="disabled")
+        else:
+            products = Product.objects.filter(vendor=vendor)
+        return products
         
+class Earning(generics.ListAPIView):
+    serializer_class = EarningSerializer
+
+    def get_queryset(self):
+
+        vendor_id = self.kwargs['vendor_id']
+        vendor = Vendor.objects.get(id=vendor_id)
+
+        one_month_ago = datetime.today() - timedelta(days=28)
+        monthly_revenue = CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid", date__gte=one_month_ago).aggregate(
+            total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+        total_revenue = CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid").aggregate(
+            total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+
+        return [{
+            'monthly_revenue': monthly_revenue,
+            'total_revenue': total_revenue,
+        }]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+@api_view(('GET',))
+def MonthlyEarningTracker(request, vendor_id):
+    vendor = Vendor.objects.get(id=vendor_id)
+    monthly_earning_tracker = (
+        CartOrderItem.objects
+        .filter(vendor=vendor, order__payment_status="paid")
+        .annotate(
+            month=ExtractMonth("date")
+        )
+        .values("month")
+        .annotate(
+            sales_count=models.Sum("qty"),
+            total_earning=models.Sum(
+                models.F('sub_total') + models.F('shipping_amount'))
+        )
+        .order_by("-month")
+    )
+    return Response(monthly_earning_tracker)
+
+class ReviewListAPIView(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        vendor_id = self.kwargs['vendor_id']
+        vendor = Vendor.objects.get(id=vendor_id)
+        return Review.objects.filter(product__vendor=vendor)
+    
+class ReviewDetailAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = ReviewSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        vendor_id = self.kwargs['vendor_id']
+        review_id = self.kwargs['review_id']
+
+        vendor = Vendor.objects.get(id=vendor_id)
+        review = Review.objects.get(product__vendor=vendor, id=review_id)
+        return review
 
     
