@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.functions import ExtractMonth
 
 
-from store.serializers import  ProductSerializer, EarningSerializer, ReviewSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer, WishlistSerializer, SummarySerializer
+from store.serializers import  ProductSerializer, EarningSerializer, ReviewSerializer, CategorySerializer, CartSerializer, CartOrderSerializer, CartOrderItemSerializer, CouponSerializer, NotificationSerializer, WishlistSerializer, SummarySerializer, CouponSummarySerializer
 from userauths.models import User
 from store.models import Cart, CartOrderItem, Notification, Product, Category, CartOrder, Gallery, ProductFaq, Review,  Specification, Coupon, Color, Size, Tax, Wishlist, Vendor
 from decimal import Decimal
@@ -124,7 +124,7 @@ class FilterProductAPIView(generics.ListAPIView):
             products = Product.objects.filter(vendor=vendor)
         return products
         
-class Earning(generics.ListAPIView):
+class EarningAPIView(generics.ListAPIView):
     serializer_class = EarningSerializer
 
     def get_queryset(self):
@@ -187,5 +187,67 @@ class ReviewDetailAPIView(generics.RetrieveUpdateAPIView):
         vendor = Vendor.objects.get(id=vendor_id)
         review = Review.objects.get(product__vendor=vendor, id=review_id)
         return review
+
+class CouponListCreateAPIView(generics.ListAPIView):
+    serializer_class = CouponSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        vendor_id = self.kwargs['vendor_id']
+        vendor = Vendor.objects.get(id=vendor_id)
+        return Coupon.objects.filter(vendor=vendor)
+    
+    def create(self, request, *args, **kwargs):
+        payload = request.data
+
+        vendor_id = payload['vendor_id']
+        code = payload['code']
+        discount = payload['discount']
+        active = payload['active']
+
+        vendor = Vendor.objects.get(id=vendor_id)
+        Coupon.objects.create(
+            vendor=vendor,
+            code=code,
+            discount=discount,
+            active=(active.lower() == "true")
+        )
+
+        return Response({"message": "Coupon Created Successfully."}, status=status.HTTP_201_CREATED)
+    
+class CouponDetailAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = CouponSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        vendor_id = self.kwargs['vendor_id']
+        coupon_id = self.kwargs['coupon_id']
+
+        vendor = Vendor.objects.get(id=vendor_id)
+        return Coupon.objects.get(vendor=vendor, id=coupon_id)
+    
+class CouponStatsAPIView(generics.ListAPIView):
+    serializer_class = CouponSummarySerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+
+        vendor_id = self.kwargs['vendor_id']
+        vendor = Vendor.objects.get(id=vendor_id)
+
+        total_coupons = Coupon.objects.filter(vendor=vendor).count()
+        active_coupons = Coupon.objects.filter(
+            vendor=vendor, active=True).count()
+
+        return [{
+            'total_coupons': total_coupons,
+            'active_coupons': active_coupons,
+        }]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
     
