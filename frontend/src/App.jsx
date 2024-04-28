@@ -31,6 +31,7 @@ import Dashboard from './views/vendor/Dashboard';
 import Product from './views/vendor/Product';
 import VendorOrders from './views/vendor/Orders';
 import VendorOrderDetail from './views/vendor/OrderDetail';
+import Earning from './views/vendor/Earning';
 
 
 function App() {
@@ -81,6 +82,7 @@ function App() {
               <Route path="/vendor/products/" element={<PrivateRoute><Product /></PrivateRoute>} />
               <Route path="/vendor/orders/" element={<PrivateRoute><VendorOrders /></PrivateRoute>} />
               <Route path="/vendor/orders/:order_oid/" element={<PrivateRoute><VendorOrderDetail /></PrivateRoute>} />
+              <Route path="/vendor/earning//" element={<PrivateRoute><Earning /></PrivateRoute>} />
 
 
             </Routes>
