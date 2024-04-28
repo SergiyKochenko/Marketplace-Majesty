@@ -80,7 +80,7 @@ class OrderAPIView(generics.ListAPIView):
     def get_queryset(self):
         vendor_id = self.kwargs['vendor_id']
         vendor = Vendor.objects.get(id=vendor_id)
-        return CartOrder.objects.filter(vendor=vendor, payment_status="paid").order_by('-id')
+        return CartOrder.objects.filter(vendor=vendor).order_by('-id')
     
 class OrderDetailAPIView(generics.RetrieveAPIView):
     serializer_class = CartOrderSerializer
@@ -103,6 +103,40 @@ class RevenueAPIView(generics.ListAPIView):
 
         return CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid").aggregate(
             total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+    
+class FilterOrderAPIView(generics.ListAPIView):
+    serializer_class = CartOrderSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self, *args, **kwargs):
+        vendor_id = self.kwargs['vendor_id']
+        vendor = Vendor.objects.get(id=vendor_id)
+
+        filter = self.request.GET.get('filter')
+
+        if filter == "paid":
+            orders = CartOrder.objects.filter(vendor=vendor, payment_status="paid").order_by('-id')
+        elif filter == "pending":
+            orders = CartOrder.objects.filter(vendor=vendor, payment_status="pending").order_by('-id')
+        elif filter == "processing":
+            orders = CartOrder.objects.filter(vendor=vendor, payment_status="processing").order_by('-id')
+        elif filter == "cancelled":
+            orders = CartOrder.objects.filter(vendor=vendor, payment_status="cancelled").order_by('-id')
+        elif filter == "latest":
+            orders = CartOrder.objects.filter(vendor=vendor, payment_status="paid").order_by('-id')
+        elif filter == "oldest":
+            orders = CartOrder.objects.filter(vendor=vendor, payment_status="paid").order_by('id')
+        elif filter == "Pending":
+            orders = CartOrder.objects.filter(vendor=vendor, order_status="Pending", payment_status="paid").order_by('-id')
+        elif filter == "Fulfilled":
+            orders = CartOrder.objects.filter(vendor=vendor, order_status="Fulfilled", payment_status="paid").order_by('-id')
+        elif filter == "Cancelled":
+            orders = CartOrder.objects.filter(vendor=vendor, order_status="Cancelled", payment_status="paid").order_by('-id')
+        else:
+            orders = CartOrder.objects.filter(vendor=vendor, payment_status="paid").order_by('-id')
+
+        return orders
+
     
 class FilterProductAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
