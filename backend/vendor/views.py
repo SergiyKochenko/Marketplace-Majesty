@@ -251,7 +251,7 @@ class CouponListCreateAPIView(generics.ListAPIView):
 
         return Response({"message": "Coupon Created Successfully."}, status=status.HTTP_201_CREATED)
     
-class CouponDetailAPIView(generics.RetrieveUpdateAPIView):
+class CouponDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CouponSerializer
     permission_classes = [AllowAny]
 

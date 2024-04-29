@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';
 import moment from 'moment'
+import Swal from 'sweetalert2';
 
 
 function Coupon() {
@@ -24,6 +25,15 @@ function Coupon() {
         fetchCouponData()
         console.log(coupons)
     }, [])
+
+    const handleDeleteCoupon = async (couponId) => {
+        await apiInstance.delete(`vendor-coupon-detail/${UserData()?.vendor_id}/${couponId}/`)
+        fetchCouponData()
+        Swal.fire({
+            icon: 'success',
+            title: 'Coupon Deleted.'
+        })
+    }
 
     
   return (
@@ -98,7 +108,7 @@ function Coupon() {
                                         <Link to={""} className="btn btn-primary mb-1 ms-2">
                                             <i className="fas fa-edit" />
                                         </Link>
-                                        <button onClick={""} className="btn btn-danger mb-1 ms-2">
+                                        <button onClick={() => handleDeleteCoupon(c.id)} className="btn btn-danger mb-1 ms-2">
                                             <i className="fas fa-trash" />
                                         </button>
                                     </td>
@@ -117,7 +127,95 @@ function Coupon() {
 
 
     </div>
-    
+
+
+
+
+
+
+    <>
+        {/* Button trigger modal */}
+
+        {/* Modal */}
+        <div
+            className="modal fade"
+            id="exampleModal"
+            tabIndex={-1}
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                            Create New Coupon
+                        </h5>
+                        <button
+                            type="button"
+                            className="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        />
+                    </div>
+                    <div className="modal-body">
+                        <form onSubmit={""}>
+                            <div className="mb-3">
+                                <label htmlFor="exampleInputEmail1" className="form-label">
+                                    Code
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="exampleInputEmail1"
+                                    aria-describedby="emailHelp"
+                                    name='code'
+                                    placeholder='Enter Coupon Code'
+                                    onChange={""}
+                                    value={""}
+                                />
+                                <div id="emailHelp" className="form-text">
+                                    E.g SERGIY 2024
+                                </div>
+                            </div>
+                            <div className="mb-3 mt-4">
+                                <label htmlFor="exampleInputPassword1" className="form-label">
+                                    Discount
+                                </label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    id="exampleInputPassword1"
+                                    name='discount'
+                                    placeholder='Enter Discount'
+                                    onChange={""}
+                                    value={""}
+                                />
+                                <div id="emailHelp" className="form-text">
+                                    NOTE: Discount is in <b>percentage</b>
+                                </div>
+                            </div>
+                            <div className="mb-3 form-check">
+                                <input checked={""} onChange={""} name='active' type="checkbox" className="form-check-input" id="exampleCheck1" />
+                                <label className="form-check-label" htmlFor="exampleCheck1">
+                                    Activate Coupon
+                                </label>
+                            </div>
+                            <button type="submit" className="btn btn-success">
+                                Create Coupon <i className='fas fa-check-circle'></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </>
+
+
+
+
+
+
+
 
 </div >
 
