@@ -224,7 +224,7 @@ class ReviewDetailAPIView(generics.RetrieveUpdateAPIView):
         review = Review.objects.get(product__vendor=vendor, id=review_id)
         return review
 
-class CouponListCreateAPIView(generics.ListAPIView):
+class CouponListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = CouponSerializer
     permission_classes = [AllowAny]
 
