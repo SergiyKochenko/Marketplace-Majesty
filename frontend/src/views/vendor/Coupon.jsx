@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
 
 import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';
@@ -62,7 +62,6 @@ function Coupon() {
             ...createCoupons,
             [event.target.name]: event.target.type === 'checkbox' ? event.target.checked : event.target.value,
         })
-        console.log(createCoupons);
     }
 
     const handleCreateCoupon = async (e) => {
@@ -75,7 +74,7 @@ function Coupon() {
         formdata.append("active", createCoupons.active)
 
         await axios.post(`vendor-coupon-list/${userData?.vendor_id}/`, formdata).then((res) => {
-            console.log(res.data);
+            fetchData(res.data);
         })
         await fetchData();
         Swal.fire({
@@ -148,9 +147,6 @@ function Coupon() {
                                                 }
                                             </td>
                                             <td>
-                                                <Link to={""} className="btn btn-secondary mb-1 ms-2">
-                                                    <i className="fas fa-eye" />
-                                                </Link>
                                                 <Link to={`/vendor/coupon/${coupon.id}/`} className="btn btn-primary mb-1 ms-2">
                                                     <i className="fas fa-edit" />
                                                 </Link>
@@ -214,7 +210,7 @@ function Coupon() {
                                             value={createCoupons.code}
                                         />
                                         <div id="emailHelp" className="form-text">
-                                            E.g DESTINY2024
+                                            E.g SERGIY2024
                                         </div>
                                     </div>
                                     <div className="mb-3 mt-4">
