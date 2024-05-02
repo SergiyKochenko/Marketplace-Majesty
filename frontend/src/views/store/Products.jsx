@@ -203,7 +203,7 @@ function Products() {
                                     </li>
                                 <div className="p-1 mt-0 pt-0 d-flex flex-wrap">
                             {p.size?.map((size, index) => (
-                                <li>
+                                <li key={index}>
                                     <button on onClick={(e) => handleSizeButtonClick(e, p.id, size.name)} className="btn btn-secondary btn-sm me-2 mb-1">
                                         {size.name}
                                     </button>
@@ -220,7 +220,7 @@ function Products() {
                             </li>
                             <div className="p-1 mt-0 pt-0 d-flex flex-wrap">
                             {p.color?.map((color, index) => (
-                                <li>
+                                <li key={index}>
                                 <button
                                     className="btn btn-sm me-2 mb-1 p-3"
                                     style={{ backgroundColor: `${color.color_code}`}}
@@ -262,7 +262,7 @@ function Products() {
 
                 <div className='row'>
                 {category?.map((c, index) => (
-                <div className="col-lg-2">
+                <div key={index} className="col-lg-2">
                   <img src={c.image} style={{ width: "100px", height: "100px", borderRadius: "50%", objectFit: "cover" }} alt="" />
                   <h6>{c.title}</h6>
                 </div>

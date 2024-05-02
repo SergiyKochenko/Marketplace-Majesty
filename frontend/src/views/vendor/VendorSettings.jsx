@@ -251,6 +251,39 @@ function Settings() {
                                 />
                               </div>
 
+                              <div className="col-lg-6 mb-2 ">
+                                <label htmlFor="" className="mb-2">
+                                  Shop Name
+                                </label>
+                                <input
+                                  type="email"
+                                  className="form-control"
+                                  aria-describedby="emailHelp"
+                                  value={vendorData?.email}
+                                  onChange={handleShopInputChange}
+                                  name='email'
+
+                                />
+                              </div>
+
+                              <div className="col-lg-6 mt-2">
+                                  <label
+                                    htmlFor="exampleInputEmail1"
+                                    className="form-label"
+                                  >
+                                    Shop Mobile
+                                  </label>
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    aria-describedby="emailHelp"
+                                    value={vendorData?.mobile}
+                                    name='mobile'
+                                    onChange={handleShopInputChange}
+
+                                  />
+                                </div>
+
                               <div className="col-lg-12 mb-2">
                                 <label htmlFor="" className="mb-2">
                                   Shop Description
@@ -267,23 +300,7 @@ function Settings() {
                               </div>
                               <div className="row">
 
-                                <div className="col-lg-12 mt-3">
-                                  <label
-                                    htmlFor="exampleInputEmail1"
-                                    className="form-label"
-                                  >
-                                    Mobile
-                                  </label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    aria-describedby="emailHelp"
-                                    value={vendorData?.mobile}
-                                    name='mobile'
-                                    onChange={handleShopInputChange}
-
-                                  />
-                                </div>
+                                
 
 
                               </div>
