@@ -407,7 +407,6 @@ class ProductCreateView(generics.CreateAPIView):
         print('sizes_data ===:', sizes_data)
         print('gallery_data ===:', gallery_data)
 
-        # Save nested serializers with the product instance
         self.save_nested_data(
             product_instance, SpecificationSerializer, specifications_data)
         self.save_nested_data(product_instance, ColorSerializer, colors_data)
