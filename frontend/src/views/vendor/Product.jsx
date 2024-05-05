@@ -88,7 +88,7 @@ function Product() {
                 <td>{p.orders}</td>
                 <td>{p.status?.toUpperCase()}</td>
                 <td>
-                  <Link href="" className="btn btn-primary mb-1 me-2">
+                  <Link to={`/detail/${p.slug}`} className="btn btn-primary mb-1 me-2">
                     <i className="fas fa-eye" />
                   </Link>
                   <Link href="" className="btn btn-success mb-1 me-2">

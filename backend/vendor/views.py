@@ -371,6 +371,7 @@ class ProductCreateView(generics.CreateAPIView):
         colors_data = []
         sizes_data = []
         gallery_data = []
+        
         for key, value in self.request.data.items():
             if key.startswith('specifications') and '[title]' in key:
                 index = key.split('[')[1].split(']')[0]

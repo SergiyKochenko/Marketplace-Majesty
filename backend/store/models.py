@@ -50,14 +50,8 @@ class Product(models.Model):
     rating = models.PositiveIntegerField(default=0, null=True, blank=True)
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     pid = ShortUUIDField(unique=True, length=10, alphabet="abcdefg12345")
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
-
-
-    def save(self, *args, **kwargs):
-        if self.slug == "" or self.slug == None:
-            self.slug = slugify(self.name)
-        super(Product, self).save(*args, **kwargs) 
 
     def __str__(self):
         return self.title
@@ -88,11 +82,13 @@ class Product(models.Model):
     
     def save(self, *args, **kwargs):        
         self.rating = self.product_rating()
+        if self.slug == "" or self.slug == None:
+            self.slug = slugify(self.title)
         super(Product, self).save(*args, **kwargs) 
     
 class Gallery(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.FileField(upload_to="products", default="gallery.jpg")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    image = models.FileField(upload_to="products", default="gallery.jpg", null=True, blank=True)
     active = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
     gid = ShortUUIDField(unique=True, length=10, alphabet="abcdefg12345")
@@ -104,27 +100,27 @@ class Gallery(models.Model):
         verbose_name_plural = "Product Images"
 
 class Specification(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    title = models.CharField(max_length=1000)
-    content = models.CharField(max_length=1000)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=1000, null=True, blank=True)
+    content = models.CharField(max_length=1000, null=True, blank=True)
 
 
     def __str__(self):
         return self.title
     
 class Size(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    name = models.CharField(max_length=1000)
-    price = models.DecimalField(default=0.00, decimal_places=2, max_digits=12)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=1000, null=True, blank=True)
+    price = models.DecimalField(default=0.00, decimal_places=2, max_digits=12, null=True, blank=True)
 
 
     def __str__(self):
         return self.name
     
 class Color(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    name = models.CharField(max_length=1000)
-    color_code = models.CharField(max_length=1000)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=1000, null=True, blank=True)
+    color_code = models.CharField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
         return self.name
