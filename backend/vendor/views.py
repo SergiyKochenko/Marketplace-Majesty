@@ -358,13 +358,15 @@ class ShopProductsAPIView(generics.ListAPIView):
         return Product.objects.filter(vendor=vendor)
     
 class ProductCreateView(generics.CreateAPIView):
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
-
+    queryset = Product.objects.all()
+    
     @transaction.atomic
     def perform_create(self, serializer):
         serializer.is_valid(raise_exception=True)
+
         serializer.save()
+
         product_instance = serializer.instance
 
         specifications_data = []
@@ -378,18 +380,14 @@ class ProductCreateView(generics.CreateAPIView):
                 title = value
                 content_key = f'specifications[{index}][content]'
                 content = self.request.data.get(content_key)
-                specifications_data.append(
-                    {'title': title, 'content': content})
+                specifications_data.append({'title': title, 'content': content})
 
             elif key.startswith('colors') and '[name]' in key:
                 index = key.split('[')[1].split(']')[0]
                 name = value
                 color_code_key = f'colors[{index}][color_code]'
                 color_code = self.request.data.get(color_code_key)
-                image_key = f'colors[{index}][image]'
-                image = self.request.data.get(image_key)
-                colors_data.append(
-                    {'name': name, 'color_code': color_code, 'image': image})
+                colors_data.append({'name': name, 'color_code': color_code})
 
             elif key.startswith('sizes') and '[name]' in key:
                 index = key.split('[')[1].split(']')[0]
@@ -403,21 +401,18 @@ class ProductCreateView(generics.CreateAPIView):
                 image = value
                 gallery_data.append({'image': image})
 
-        print('specifications_data ===:', specifications_data)
-        print('colors_data ===:', colors_data)
-        print('sizes_data ===:', sizes_data)
-        print('gallery_data ===:', gallery_data)
+        print('specifications_data ===', specifications_data)
+        print('colors_data ===', colors_data)
+        print('sizes_data ===', sizes_data)
+        print('gallery_data ===', gallery_data)
 
-        self.save_nested_data(
-            product_instance, SpecificationSerializer, specifications_data)
+        self.save_nested_data(product_instance, SpecificationSerializer, specifications_data)
         self.save_nested_data(product_instance, ColorSerializer, colors_data)
         self.save_nested_data(product_instance, SizeSerializer, sizes_data)
-        self.save_nested_data(
-            product_instance, GallerySerializer, gallery_data)
+        self.save_nested_data(product_instance, GallerySerializer, gallery_data)
 
     def save_nested_data(self, product_instance, serializer_class, data):
-        serializer = serializer_class(data=data, many=True, context={
-                                      'product_instance': product_instance})
+        serializer = serializer_class(data=data, many=True, context={'product_instance': product_instance})
         serializer.is_valid(raise_exception=True)
         serializer.save(product=product_instance)
 

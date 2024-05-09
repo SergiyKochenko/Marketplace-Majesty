@@ -28,6 +28,8 @@ function AddProduct() {
   const [gallery, setGallery] = useState([{ image: '' }])
   const [category, setCategory] = useState([])
 
+  const navigate = useNavigate()
+
   const handleAddMore = (setStateFunction) => {
     setStateFunction((prevState) => [...prevState, {}])
   }
@@ -106,16 +108,64 @@ function AddProduct() {
       setCategory(res.data)
     })
   }, [])
+
+  const handleSubmit = async (e) => {
+      e.preventDefault()
+
+      const formdata = new FormData()
+      Object.entries(product).forEach(([key, value]) => {
+          if (key === 'image' && value){
+              formdata.append(key, value.file)
+          } else {
+              formdata.append(key, value)
+          }
+      })
+
+      specifications.forEach((specification, index) => {
+          Object.entries(specification).forEach(([key, value]) => {
+              formdata.append(`specifications[${index}][${key}]`, value)
+          })
+      })
+
+      colors.forEach((color, index) => {
+          Object.entries(color).forEach(([key, value]) => {
+              formdata.append(`colors[${index}][${key}]`, value)
+          })
+      })
+
+      sizes.forEach((size, index) => {
+          Object.entries(size).forEach(([key, value]) => {
+              formdata.append(`sizes[${index}][${key}]`, value)
+          })
+      })
+
+      gallery.forEach((item, index) => {
+          if(item.image) {
+              formdata.append(`gallery[${index}][image]`, item.image.file)
+          }
+      })
+
+      const response = await apiInstance.post(`vendor-create-product/`, formdata, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+      })
+      Swal.fire({
+        icon: "success",
+        title: "Product Create Successfully.",
+        timer: 1500
+      })
+
+      navigate('/vendor/products/')
+  }
   
   return (
     <div className="container-fluid" id="main">
   <div className="row row-offcanvas row-offcanvas-left h-100">
     <Sidebar />
-
-
     <div className="col-md-9 col-lg-10 main mt-4">
       <div className="container">
-        <div className="main-body">
+        <form onSubmit={handleSubmit} className="main-body">
           <div className="tab-content" id="pills-tabContent">
             <div
               className="tab-pane fade show active"
@@ -128,12 +178,7 @@ function AddProduct() {
                 <div className="col-md-12">
                   <div className="card mb-3">
                     <div className="card-body">
-                      <form
-                        className="form-group"
-                        method="POST"
-                        noValidate=""
-                        encType="multipart/form-data"
-                      >
+                      
                         <div className="row text-dark">
                           <div className="col-lg-6 mb-2">
                             <label htmlFor="" className="mb-2">
@@ -195,7 +240,7 @@ function AddProduct() {
                               Sale Price
                             </label>
                             <input
-                              type="text"
+                              type="number"
                               className="form-control"
                               name="price"
                               value={product.price || ''}
@@ -207,7 +252,7 @@ function AddProduct() {
                               Regular Price
                             </label>
                             <input
-                              type="text"
+                              type="number"
                               className="form-control"
                               name="old_price"
                               value={product.old_price || ''}
@@ -219,7 +264,7 @@ function AddProduct() {
                               Shipping Amount
                             </label>
                             <input
-                              type="text"
+                              type="number"
                               className="form-control"
                               name="shipping_amount"
                               value={product.shipping_amount || ''}
@@ -231,7 +276,7 @@ function AddProduct() {
                               Stock Qty
                             </label>
                             <input
-                              type="text"
+                              type="number"
                               className="form-control"
                               name="stock_qty"
                               value={product.stock_qty || ''}
@@ -239,7 +284,7 @@ function AddProduct() {
                             />
                           </div>
                         </div>
-                      </form>
+
                     </div>
                   </div>
                 </div>
@@ -289,7 +334,7 @@ function AddProduct() {
                       {gallery < 1 && 
                       <h4>No Images Selected</h4>}
 
-                      <button onClick={() => handleAddMore(setGallery)} className="btn btn-primary mt-5">
+                      <button onClick={() => handleAddMore(setGallery)} type='button' className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Image
                       </button>
                     </div>
@@ -316,7 +361,7 @@ function AddProduct() {
                         </div>
                         <div className="col-lg-5 ">
                           <label htmlFor="" className=""> Content </label>
-                          <input value={specification.content || ''} onChange={(e) => handleInputChange(index, 'title', e.target.value, setSpecifications)} type="text" className="form-control" name="" id="" />
+                          <input value={specification.content || ''} onChange={(e) => handleInputChange(index, 'content', e.target.value, setSpecifications)} type="text" className="form-control" />
                         </div>
                         <div className="col-lg-2 ">
                           <button onClick={() => handleRemove(index, setSpecifications)} className='btn btn-danger mt-4'>Remove</button>
@@ -328,7 +373,7 @@ function AddProduct() {
                         <h4>No specifications selected</h4>
                       )}
 
-                      <button onClick={() => handleAddMore(setSpecifications)} className="btn btn-primary mt-5">
+                      <button onClick={() => handleAddMore(setSpecifications)} type='button' className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Specifications
                       </button>
                     </div>
@@ -371,12 +416,12 @@ function AddProduct() {
                         
                       <div key={index} className="row text-dark">
                         <div className="col-lg-5 ">
-                          <label htmlFor="" className=""> Size </label>
-                          <input value={s.title || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setSizes)} type="text" className="form-control" name="" id="" />
+                          <label htmlFor="" className=""> Title </label>
+                          <input value={s.name || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setSizes)} type="text" className="form-control" name="" id="" />
                         </div>
                         <div className="col-lg-5 ">
                           <label htmlFor="" className=""> Price </label>
-                          <input value={s.price || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setSizes)} type="text" className="form-control" name="" id="" />
+                          <input value={s.price || ''} onChange={(e) => handleInputChange(index, 'price', e.target.value, setSizes)} type="number" className="form-control" name="" id="" />
                         </div>
                         <div className="col-lg-2 ">
                           <button onClick={() => handleRemove(index, setSizes)} className='btn btn-danger mt-4'>Remove</button>
@@ -388,7 +433,7 @@ function AddProduct() {
                         <h4>No sizes selected</h4>
                       )}
                    
-                      <button onClick={() => handleAddMore(setSizes)} className="btn btn-primary mt-5">
+                      <button onClick={() => handleAddMore(setSizes)} type='button' className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Size
                       </button>
                     </div>
@@ -410,15 +455,13 @@ function AddProduct() {
                         {colors.map((c, index) => (
                       <div key={index} className="row text-dark">
                         <div className="col-lg-5 ">
-                          <label htmlFor="" className="">
-                            Name
-                          </label>
+                          <label htmlFor="" className="">Name</label>
                           <input value={c.name || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setColors)} type="text"
                             className="form-control" name="" placeholder="Green" id="" />
                         </div>
                         <div className="col-lg-5 ">
                           <label htmlFor="" className=""> Code </label>
-                          <input value={c.color_code || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setColors)} type="text" placeholder="#f4f7f6" className="form-control"  name="" id="" />
+                          <input value={c.color_code || ''} onChange={(e) => handleInputChange(index, 'color_code', e.target.value, setColors)} type="text" placeholder="#f4f7f6" className="form-control"  name="" id="" />
                         </div>
                         <div className="col-lg-2 ">
                         <button onClick={() => handleRemove(index, setColors)} className='btn btn-danger mt-4'>Remove</button>
@@ -428,7 +471,7 @@ function AddProduct() {
                       {colors < 1 && (
                         <h4>No colors selected</h4>
                       )}
-                      <button onClick={() => handleAddMore(setColors)} className="btn btn-primary mt-5">
+                      <button onClick={() => handleAddMore(setColors)} type='button' className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Color
                       </button>
                     </div>
@@ -514,13 +557,13 @@ function AddProduct() {
                 </li>
               </ul>
               <div className="d-flex justify-content-center mb-5">
-                <button className="btn btn-success w-50">
+                <button className="btn btn-success w-50" type='submit'>
                   Create Product <i className="fa fa-check-circle" />{" "}
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>

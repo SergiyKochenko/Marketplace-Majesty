@@ -88,7 +88,7 @@ class Product(models.Model):
     
 class Gallery(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    image = models.FileField(upload_to="products", default="gallery.jpg", null=True, blank=True)
+    image = models.FileField(upload_to="products", default="product.jpg", null=True, blank=True)
     active = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
     gid = ShortUUIDField(unique=True, length=10, alphabet="abcdefg12345")
