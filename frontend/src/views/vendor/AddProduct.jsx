@@ -1,175 +1,121 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import Sidebar from './Sidebar';
+import apiInstance from '../../utils/axios';
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';
-import Sidebar from './Sidebar';
 import Swal from 'sweetalert2';
 
 
 function AddProduct() {
-    const userData = UserData()
+  const userData = UserData()
 
-    const [product, setProduct] = useState({
-        title: '',
-        image: null,
-        description: '',
-        category: '',
-        price: '',
-        old_price: '',
-        shipping_amount: '',
-        stock_qty: '',
-        vendor: userData?.vendor_id,
-    });
-    const [specifications, setSpecifications] = useState([{ title: '', content: '' }]);
-    const [colors, setColors] = useState([{ name: '', color_code: '', image: null }]);
-    const [sizes, setSizes] = useState([{ name: '', price: '' }]);
-    const [gallery, setGallery] = useState([{ image: '' }]);
-    const [category, setCategory] = useState([]);
+  const [product, setProduct] = useState({
+      title: '',
+      image: null,
+      description: '',
+      category: '',
+      price: '',
+      old_price: '',
+      shipping_amount: '',
+      stock_qty: '',
+      vendor: userData?.vendor_id,
+  })
 
-    const navigate = useNavigate()
+  const [specifications, setSpecifications] = useState([{title: '', content: '' }])
+  const [colors, setColors] = useState([{ name: '', color_code: '' }])
+  const [sizes, setSizes] = useState([{ name: '', price: '' }])
+  const [gallery, setGallery] = useState([{ image: '' }])
+  const [category, setCategory] = useState([])
 
-    const handleAddMore = (setStateFunction) => {
-        setStateFunction((prevState) => [...prevState, {}]);
-    };
+  const handleAddMore = (setStateFunction) => {
+    setStateFunction((prevState) => [...prevState, {}])
+  }
 
-    const handleRemove = (index, setStateFunction) => {
+  const handleRemove = (index, setStateFunction) => {
+    setStateFunction((prevState) => {
+      const newState = [...prevState]
+      newState.splice(index, 1)
+      return newState
+    })
+  }
+  const handleInputChange = (index, field, value, setStateFunction) => {
+    setStateFunction((prevState) => {
+      const newState = [...prevState]
+      newState[index][field] = value
+
+      return newState
+    })
+  }
+
+  const handleImageChange = (index, event, setStateFunction) => {
+    const file = event.target.files[0]
+
+    if (file) {
+      const reader = new FileReader()
+
+      reader.onloadend = () => {
         setStateFunction((prevState) => {
-            const newState = [...prevState];
-            newState.splice(index, 1);
-            return newState;
-        });
-    };
-
-    const handleInputChange = (index, field, value, setStateFunction) => {
-        setStateFunction((prevState) => {
-            const newState = [...prevState];
-            newState[index][field] = value;
-            return newState;
-        });
-    };
-
-    const handleImageChange = (index, event, setStateFunction) => {
-        const file = event.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onloadend = () => {
-                setStateFunction((prevState) => {
-                    const newState = [...prevState];
-                    newState[index].image = { file, preview: reader.result };
-                    return newState;
-                });
-            };
-
-            reader.readAsDataURL(file);
-        } else {
-            setStateFunction((prevState) => {
-                const newState = [...prevState];
-                newState[index].image = null;
-                newState[index].preview = null;
-                return newState;
-            });
-        }
-    };
-
-    const handleProductInputChange = (event) => {
-        setProduct({
-            ...product,
-            [event.target.name]: event.target.value
+          const newState = [...prevState]
+          newState[index].image = { file, preview: reader.result }
+          return newState
         })
+      }
 
-        console.log(product)
-    };
-
-    const handleProductFileChange = (event) => {
-        const file = event.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onloadend = () => {
-                setProduct({
-                    ...product,
-                    image: {
-                        file: event.target.files[0],
-                        preview: reader.result
-                    }
-                });
-            };
-
-            reader.readAsDataURL(file);
-        }
+      reader.readAsDataURL(file)
+    } else {
+        setStateFunction((prevState) => {
+          const newState = [...prevState]
+          newState[index].image = null
+          newState[index].preview = null
+          return newState
+        })
     }
+  }
 
-    useEffect(() => {
-        apiInstance.get(`category/`).then((res) => {
-            setCategory(res.data)
+  const handleProductInputChange = (event) => {
+    setProduct({
+      ...product,
+      [event.target.name]: event.target.value
+    })
+
+    console.log(product);
+  }
+
+  const handleProductFileChange = (event) => {
+    const file = event.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+
+      reader.onloadend = () => {
+        setProduct({
+          ...product,
+          image: {
+            file: event.target.files[0],
+            preview: reader.result
+
+          }
         })
-    }, [])
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-
-      const formdata = new FormData()
-      Object.entries(product).forEach(([key, value]) => {
-        if (key === 'image' && value){
-          formdata.append(key, value.file)
-        } else {
-          formdata.append(key, value);
-        }
-      })
-
-      specifications.forEach((specification, index) => {
-        Object.entries(specification).forEach(([key, value]) => {
-            formdata.append(`specifications[${index}][${key}]`, value);
-        });
-      });
-
-      colors.forEach((color, index) => {
-          Object.entries(color).forEach(([key, value]) => {
-                  formdata.append(`colors[${index}][${key}]`, value);
-            
-          });
-      });
-
-    sizes.forEach((size, index) => {
-        Object.entries(size).forEach(([key, value]) => {
-            formdata.append(`sizes[${index}][${key}]`, value);
-        });
-    });
-
-    gallery.forEach((item, index) => {
-        if (item.image) {
-            formdata.append(`gallery[${index}][image]`, item.image.file);
-        }
-      });
-
-  const response = await apiInstance.post(`vendor-create-product/`, formdata, {
-    headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-  });
+  useEffect(() => {
+    apiInstance.get('category/').then((res) => {
+      setCategory(res.data)
+    })
+  }, [])
   
-     Swal.fire({
-      icon: "success",
-      title: "Product Created Successfully.",
-      timer:1500
-     })
-
-     
-     navigate('/vendor/products')
-};
-
-
   return (
     <div className="container-fluid" id="main">
   <div className="row row-offcanvas row-offcanvas-left h-100">
     <Sidebar />
+
+
     <div className="col-md-9 col-lg-10 main mt-4">
       <div className="container">
-        <form onSubmit={handleSubmit} className="main-body">
+        <div className="main-body">
           <div className="tab-content" id="pills-tabContent">
             <div
               className="tab-pane fade show active"
@@ -182,7 +128,12 @@ function AddProduct() {
                 <div className="col-md-12">
                   <div className="card mb-3">
                     <div className="card-body">
-                     
+                      <form
+                        className="form-group"
+                        method="POST"
+                        noValidate=""
+                        encType="multipart/form-data"
+                      >
                         <div className="row text-dark">
                           <div className="col-lg-6 mb-2">
                             <label htmlFor="" className="mb-2">
@@ -205,6 +156,7 @@ function AddProduct() {
                               name="title"
                               value={product.title || ''}
                               onChange={handleProductInputChange}
+                              
                             />
                           </div>
                           <div className="col-lg-12 mb-2">
@@ -233,8 +185,8 @@ function AddProduct() {
                               onChange={handleProductInputChange}
                             >
                               <option value="">- Select -</option>
-                              {category?.map((c, index) =>(
-                              <option key={index} value={c.id}>{c.title}</option>
+                              {category?.map((c, index) => (
+                                <option key={index} value={c.id}>{c.title}</option>
                               ))}
                             </select>
                           </div>
@@ -243,7 +195,7 @@ function AddProduct() {
                               Sale Price
                             </label>
                             <input
-                              type="number"
+                              type="text"
                               className="form-control"
                               name="price"
                               value={product.price || ''}
@@ -255,7 +207,7 @@ function AddProduct() {
                               Regular Price
                             </label>
                             <input
-                              type="number"
+                              type="text"
                               className="form-control"
                               name="old_price"
                               value={product.old_price || ''}
@@ -267,7 +219,7 @@ function AddProduct() {
                               Shipping Amount
                             </label>
                             <input
-                              type="number"
+                              type="text"
                               className="form-control"
                               name="shipping_amount"
                               value={product.shipping_amount || ''}
@@ -279,7 +231,7 @@ function AddProduct() {
                               Stock Qty
                             </label>
                             <input
-                              type="number"
+                              type="text"
                               className="form-control"
                               name="stock_qty"
                               value={product.stock_qty || ''}
@@ -287,6 +239,7 @@ function AddProduct() {
                             />
                           </div>
                         </div>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -303,41 +256,40 @@ function AddProduct() {
                 <div className="col-md-12">
                   <div className="card mb-3">
                     <div className="card-body">
-                    {gallery.map((item, index) => (
+                      {gallery.map((item, index) => (
                       <div key={index} className="row text-dark">
                         <div className="col-lg-6 mb-2">
                           {item.image && (
-                            <img  src={item.image.preview} 
-                                alt='' 
-                                style={{width: "100%", height: "200px", objectFit:"cover", borderRadius: "10px"}}/>
+                                <img  src={item.image.preview} 
+                                  alt="" 
+                                  style={{width:"100%", height:"200px", objectFit:"cover", borderRadius:"10px"}} 
+                                />
                           )}
-
                           {!item.image && (
-                            <img  src="https://www.eclosio.ong/wp-content/uploads/2018/08/default.png" 
-                                alt='' 
-                                style={{width: "100%", height: "200px", objectFit:"cover", borderRadius: "10px"}}/>
+                                <img  src="https://www.eclosio.ong/wp-content/uploads/2018/08/default.png" 
+                                  alt="" 
+                                  style={{width:"100%", height:"200px", objectFit:"cover", borderRadius:"10px"}} 
+                                />
                           )}
                         </div>
-                        <div className="col-lg-3">
-                          <label htmlFor="" className="">Product Image</label>
+                        <div className="col-lg-3 ">
+                          <label htmlFor="" className=""> Product Image </label>
                           <input 
-                                type="file" 
-                                className="form-control" 
-                                onChange={(e) => handleImageChange(index, e, setGallery)} 
-                            />
+                              type="file" 
+                              className="form-control" 
+                              onChange={(e) => handleImageChange(index, e, setGallery)} 
+                          />
                         </div>
-                        <div className="col-lg-3">
+                        <div className="col-lg-3 ">
                           <button onClick={() => handleRemove(index, setGallery)} className='btn btn-danger mt-4'>Remove</button>
                         </div>
                       </div>
                       ))}
 
-                    {gallery < 1 && 
-                    <h4>No Images Selected</h4>
-                    
-                    }
+                      {gallery < 1 && 
+                      <h4>No Images Selected</h4>}
 
-                      <button onClick={() => handleAddMore(setGallery)} type='button' className="btn btn-primary mt-5">
+                      <button onClick={() => handleAddMore(setGallery)} className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Image
                       </button>
                     </div>
@@ -356,41 +308,27 @@ function AddProduct() {
                 <div className="col-md-12">
                   <div className="card mb-3">
                     <div className="card-body">
-                    {specifications.map((specification, index) =>(
+                        {specifications.map((specification, index) => (
                       <div key={index} className="row text-dark">
-                        <div className="col-lg-5">
-                          <label htmlFor="" className="">
-                            Title
-                          </label>
-                          <input
-                            onChange={(e) => handleInputChange(index, 'title', e.target.value, setSpecifications)}
-                            type="text"
-                            className="form-control"
-
-                          />
+                        <div className="col-lg-5 mb-2">
+                          <label className=""> Title </label>
+                          <input value={specification.title || ''} onChange={(e) => handleInputChange(index, 'title', e.target.value, setSpecifications)} type="text" className="form-control" />
                         </div>
-                        <div className="col-lg-5">
-                          <label htmlFor="" className="">
-                            Content
-                          </label>
-                          <input
-                            onChange={(e) => handleInputChange(index, 'content', e.target.value, setSpecifications)}
-                            type="text"
-                            className="form-control"
-
-                          />
+                        <div className="col-lg-5 ">
+                          <label htmlFor="" className=""> Content </label>
+                          <input value={specification.content || ''} onChange={(e) => handleInputChange(index, 'title', e.target.value, setSpecifications)} type="text" className="form-control" name="" id="" />
                         </div>
-                        <div className="col-lg-2">
-                        <button onClick={() => handleRemove(index, setSpecifications)} className='btn btn-danger mt-4'>Remove</button>
+                        <div className="col-lg-2 ">
+                          <button onClick={() => handleRemove(index, setSpecifications)} className='btn btn-danger mt-4'>Remove</button>
                         </div>
                       </div>
                       ))}
 
-                        {specifications < 1 && (
-                            <h4>No specifications selected</h4>
-                        )}
+                      {specifications < 1 && (
+                        <h4>No specifications selected</h4>
+                      )}
 
-                      <button onClick={() => handleAddMore(setSpecifications)} type='button' className="btn btn-primary mt-5">
+                      <button onClick={() => handleAddMore(setSpecifications)} className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Specifications
                       </button>
                     </div>
@@ -409,30 +347,7 @@ function AddProduct() {
                 <div className="col-md-12">
                   <div className="card mb-3">
                     <div className="card-body">
-                      <div className="row text-dark">
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Title
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
-                        </div>
-                        <div className="col-lg-6 mb-2">
-                          <label htmlFor="" className="mb-2">
-                            Content
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name=""
-                            id=""
-                          />
-                        </div>
-                      </div>
+                      
                       <button className="btn btn-primary mt-5">
                         <i className="fas fa-plus" /> Add Specifications
                       </button>
@@ -442,157 +357,85 @@ function AddProduct() {
               </div>
             </div>
             <div
-            className="tab-pane fade"
-            id="pills-size"
-            role="tabpanel"
-            aria-labelledby="pills-size-tab"
-        >
-            <div className="row gutters-sm shadow p-4 rounded">
-                <h4 className="mb-4">Sizes</h4>
+              className="tab-pane fade"
+              id="pills-size"
+              role="tabpanel"
+              aria-labelledby="pills-size-tab"
+            >
+              <div className="row gutters-sm shadow p-4 rounded">
+                <h4 className="mb-4">Size</h4>
                 <div className="col-md-12">
-                    <div className="card mb-3">
-                        <div className="card-body">
-                            {sizes.map((s, index) => (
-
-                                <div key={index} className="row text-dark">
-                                    <div className="col-lg-3 mb-2">
-                                        <label htmlFor="" className="mb-2">
-                                            Size
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name=""
-                                            placeholder="Example - XXL"
-                                            id=""
-                                            value={s.name || ''}
-                                            onChange={(e) => handleInputChange(index, 'name', e.target.value, setSizes)}
-
-                                        />
-                                    </div>
-                                    <div className="col-lg-6 mb-2">
-                                        <label htmlFor="" className="mb-2">
-                                            Price
-                                        </label>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            name=""
-                                            id=""
-                                            value={s.price || ''}
-                                            onChange={(e) => handleInputChange(index, 'price', e.target.value, setSizes)}
-
-                                        />
-                                    </div>
-                                    <div className="col-lg-3 mt-2">
-                                        <button type='button' onClick={() => handleRemove(index, setSizes)} className='btn btn-danger mt-4'>Remove</button>
-                                    </div>
-                                </div>
-                            ))}
-                            {sizes < 1 &&
-                                <h4>No Size Added</h4>
-                            }
-                            <button type='button' onClick={() => handleAddMore(setSizes)} className="btn btn-primary mt-2">
-                                <i className="fas fa-plus" /> Add More Sizes
-                            </button>
+                  <div className="card mb-3">
+                    <div className="card-body">
+                      {sizes.map((s, index) => (
+                        
+                      <div key={index} className="row text-dark">
+                        <div className="col-lg-5 ">
+                          <label htmlFor="" className=""> Size </label>
+                          <input value={s.title || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setSizes)} type="text" className="form-control" name="" id="" />
                         </div>
+                        <div className="col-lg-5 ">
+                          <label htmlFor="" className=""> Price </label>
+                          <input value={s.price || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setSizes)} type="text" className="form-control" name="" id="" />
+                        </div>
+                        <div className="col-lg-2 ">
+                          <button onClick={() => handleRemove(index, setSizes)} className='btn btn-danger mt-4'>Remove</button>
+                        </div>
+                      </div>
+                      ))}
+                     
+                      {sizes < 1 && (
+                        <h4>No sizes selected</h4>
+                      )}
+                   
+                      <button onClick={() => handleAddMore(setSizes)} className="btn btn-primary mt-5">
+                        <i className="fas fa-plus" /> Add Size
+                      </button>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-        <div
-        className="tab-pane fade"
-        id="pills-color"
-        role="tabpanel"
-        aria-labelledby="pills-color-tab"
-    >
-        <div className="row gutters-sm shadow p-4 rounded">
-            <h4 className="mb-4">Color</h4>
-            <div className="col-md-12">
-                <div className="card mb-3">
+            <div
+              className="tab-pane fade"
+              id="pills-color"
+              role="tabpanel"
+              aria-labelledby="pills-color-tab"
+            >
+              <div className="row gutters-sm shadow p-4 rounded">
+                <h4 className="mb-4">Color</h4>
+                <div className="col-md-12">
+                  <div className="card mb-3">
                     <div className="card-body">
                         {colors.map((c, index) => (
-                            <div key={index} className="row text-dark mb-3">
-                                <div className="col-lg-2 mb-2">
-                                    <label htmlFor="" className="mb-2">
-                                        Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name=""
-                                        placeholder="Green"
-                                        id=""
-                                        value={c.name || ''}
-                                        onChange={(e) => handleInputChange(index, 'name', e.target.value, setColors)}
-
-                                    />
-                                </div>
-                                <div className="col-lg-2 mb-2">
-                                    <label htmlFor="" className="mb-2">
-                                        Code
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="#f4f7f6"
-                                        className="form-control"
-                                        name=""
-                                        id=""
-                                        value={c.color_code || ''}
-                                        onChange={(e) => handleInputChange(index, 'color_code', e.target.value, setColors)}
-
-                                    />
-                                </div>
-                                <div className="col-lg-3 mb-2">
-                                    <label htmlFor="" className="mb-2">
-                                        Image
-                                    </label>
-                                    <input
-                                        type="file"
-                                        className="form-control"
-                                        name=""
-                                        id=""
-                                        onChange={(e) => handleImageChange(index, e, setColors)}
-
-                                    />
-                                </div>
-
-                                <div className="col-lg-3 mt-2">
-                                    {c.image && (
-                                        <img
-                                            src={c.image.preview}
-                                            alt={`Preview for gallery item ${index + 1}`}
-                                            style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: 5 }}
-                                        />
-                                    )}
-                                    {!c.image && (
-                                        <img
-                                            src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
-                                            alt={`Preview for gallery item ${index + 1}`}
-                                            style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: 5 }}
-                                        />
-                                    )}
-                                </div>
-
-                                <div className="col-lg-2 mt-2">
-                                    <button type='button' onClick={() => handleRemove(index, setColors)} className='btn btn-danger mt-4'>Remove</button>
-                                </div>
-
-                            </div>
-                        ))}
-
-                        {colors < 1 &&
-                            <h4>No Colors Added</h4>
-                        }
-
-                        <button type='button' onClick={() => handleAddMore(setColors)} className="btn btn-primary mt-2">
-                            <i className="fas fa-plus" /> Add Colors
-                        </button>
+                      <div key={index} className="row text-dark">
+                        <div className="col-lg-5 ">
+                          <label htmlFor="" className="">
+                            Name
+                          </label>
+                          <input value={c.name || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setColors)} type="text"
+                            className="form-control" name="" placeholder="Green" id="" />
+                        </div>
+                        <div className="col-lg-5 ">
+                          <label htmlFor="" className=""> Code </label>
+                          <input value={c.color_code || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value, setColors)} type="text" placeholder="#f4f7f6" className="form-control"  name="" id="" />
+                        </div>
+                        <div className="col-lg-2 ">
+                        <button onClick={() => handleRemove(index, setColors)} className='btn btn-danger mt-4'>Remove</button>
+                        </div>
+                      </div>
+                      ))}
+                      {colors < 1 && (
+                        <h4>No colors selected</h4>
+                      )}
+                      <button onClick={() => handleAddMore(setColors)} className="btn btn-primary mt-5">
+                        <i className="fas fa-plus" /> Add Color
+                      </button>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
             <div>
               <ul
                 className="nav nav-pills mb-3 d-flex justify-content-center mt-5"
@@ -671,13 +514,13 @@ function AddProduct() {
                 </li>
               </ul>
               <div className="d-flex justify-content-center mb-5">
-                <button className="btn btn-success w-50" type='submit'>
+                <button className="btn btn-success w-50">
                   Create Product <i className="fa fa-check-circle" />{" "}
                 </button>
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>

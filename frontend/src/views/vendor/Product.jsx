@@ -91,7 +91,7 @@ function Product() {
                   <Link to={`/detail/${p.slug}`} className="btn btn-primary mb-1 me-2">
                     <i className="fas fa-eye" />
                   </Link>
-                  <Link href="" className="btn btn-success mb-1 me-2">
+                  <Link to={`/vendor/product/update/${p.pid}/`} className="btn btn-success mb-1 me-2">
                     <i className="fas fa-edit" />
                   </Link>
                   <Link href="" className="btn btn-danger mb-1">
