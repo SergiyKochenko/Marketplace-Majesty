@@ -418,8 +418,8 @@ class ProductCreateView(generics.CreateAPIView):
 
 
 class ProductUpdateView(generics.RetrieveUpdateAPIView):
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    queryset = Product.objects.all()
 
     def get_object(self):
         vendor_id = self.kwargs['vendor_id']
@@ -428,7 +428,7 @@ class ProductUpdateView(generics.RetrieveUpdateAPIView):
         vendor = Vendor.objects.get(id=vendor_id)
         product = Product.objects.get(pid=product_pid, vendor=vendor)
         return product
-
+    
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         product = self.get_object()
@@ -436,6 +436,7 @@ class ProductUpdateView(generics.RetrieveUpdateAPIView):
         serializer = self.get_serializer(product, data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+
 
         product.specification().delete()
         product.color().delete()
@@ -453,18 +454,14 @@ class ProductUpdateView(generics.RetrieveUpdateAPIView):
                 title = value
                 content_key = f'specifications[{index}][content]'
                 content = self.request.data.get(content_key)
-                specifications_data.append(
-                    {'title': title, 'content': content})
+                specifications_data.append({'title': title, 'content': content})
 
             elif key.startswith('colors') and '[name]' in key:
                 index = key.split('[')[1].split(']')[0]
                 name = value
                 color_code_key = f'colors[{index}][color_code]'
                 color_code = self.request.data.get(color_code_key)
-                image_key = f'colors[{index}][image]'
-                image = self.request.data.get(image_key)
-                colors_data.append(
-                    {'name': name, 'color_code': color_code, 'image': image})
+                colors_data.append({'name': name, 'color_code': color_code})
 
             elif key.startswith('sizes') and '[name]' in key:
                 index = key.split('[')[1].split(']')[0]
@@ -478,10 +475,10 @@ class ProductUpdateView(generics.RetrieveUpdateAPIView):
                 image = value
                 gallery_data.append({'image': image})
 
-        print('specifications_data ===:', specifications_data)
-        print('colors_data ===:', colors_data)
-        print('sizes_data ===:', sizes_data)
-        print('gallery_data ===:', gallery_data)
+        print('specifications_data ===', specifications_data)
+        print('colors_data ===', colors_data)
+        print('sizes_data ===', sizes_data)
+        print('gallery_data ===', gallery_data)
 
         self.save_nested_data(product, SpecificationSerializer, specifications_data)
         self.save_nested_data(product, ColorSerializer, colors_data)
@@ -492,6 +489,18 @@ class ProductUpdateView(generics.RetrieveUpdateAPIView):
         serializer = serializer_class(data=data, many=True, context={'product_instance': product_instance})
         serializer.is_valid(raise_exception=True)
         serializer.save(product=product_instance)
+
+class ProductDeleteAPIView(generics.DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get_object(self):
+        vendor_id = self.kwargs['vendor_id']
+        product_pid = self.kwargs['product_pid']
+
+        vendor = Vendor.objects.get(id=vendor_id)
+        product = Product.objects.get(pid=product_pid, vendor=vendor)
+        return product
        
 
 

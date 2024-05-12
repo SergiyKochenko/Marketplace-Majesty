@@ -10,18 +10,7 @@ import Swal from 'sweetalert2';
 function AddProduct() {
   const userData = UserData()
 
-  const [product, setProduct] = useState({
-      title: '',
-      image: null,
-      description: '',
-      category: '',
-      price: '',
-      old_price: '',
-      shipping_amount: '',
-      stock_qty: '',
-      vendor: userData?.vendor_id,
-  })
-
+  const [product, setProduct] = useState([])
   const [specifications, setSpecifications] = useState([{title: '', content: '' }])
   const [colors, setColors] = useState([{ name: '', color_code: '' }])
   const [sizes, setSizes] = useState([{ name: '', price: '' }])
@@ -41,6 +30,7 @@ function AddProduct() {
       return newState
     })
   }
+
   const handleInputChange = (index, field, value, setStateFunction) => {
     setStateFunction((prevState) => {
       const newState = [...prevState]
@@ -567,7 +557,7 @@ function AddProduct() {
       </div>
     </div>
   </div>
-</div>
+    </div>
 
   )
 }

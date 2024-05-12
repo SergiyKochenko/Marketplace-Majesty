@@ -53,7 +53,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "status",
             "featured",
             "views",
-            "rating",
+            # "rating",
             "vendor",
             "pid",
             "slug",
