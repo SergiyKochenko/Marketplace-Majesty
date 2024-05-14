@@ -42,6 +42,8 @@ backend:
 - pip install stripe
 - pip install environs
 - pip install django-anymail
+- pip install boto3==1.20.26 botocore==1.23.54 django-storages==1.12.3
+- python manage.py collectstatic
 
 =============================
 - frontend:
