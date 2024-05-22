@@ -1,6 +1,43 @@
 "# Marketplace-Majesty" 
 
 
+
+The site was constantly tested during the process of creating the site in the Gitpod Environment and the deployed site on Heroku was also tested in terms of user experience.
+The available functionality and user experience is reflected in the table below.
+
+| Goals/actions  | As a guest | As a logged user  | Result | Comment |
+|--|:--:|:--:|:--:|--|
+| User can use menu and navigating through pages | &check; | &check; | Pass | Click on menu item redirects to appropriate page |
+| User can see the home page | &check; | &check; | Pass | |
+| User can see the Pricing page | &check; |&check;  |  Pass| |
+| User can see the Sign Up page | &check; |&check;  |  Pass| |
+| User can see the Login page  | &check; |&check;  |  Pass| |
+| User can see the Logout page  | &check; |&check;  |  Pass| |
+| User can click the Book Now button  | &check; |&check;  |  Pass| Redirects to the page with a message that the user must register or log in for guest or shows up form for authorized user |
+| User can see the Booknow page | &cross; | &check;  | Pass |A page is displayed with a message that the user must register or log in  |
+| User can fill fields in the form the Booknow page | &cross; | &check;  | Pass |This page and form are available only to authorized users |
+| User can see the Bookings page   | &cross; | &check;  | Pass | This page is available only to an authorized users|
+| User can see the Change booking page  | &cross;  | &check;  | Pass | This page is available only to authorized users|
+| User can edit booking in the form on the Change booking page  | &cross;  | &check;  | Pass |This page is available only to authorized users ||
+| User can see the Delete booking page  |  &cross; | &check;  |Pass  | This page is available only to authorized users |
+| User can see the  User's blog page  |  &check; | &check;  |Pass  |  |
+| User can see the Create post  |  &cross; | &check;  |Pass  | This page is available only to authorized users |
+| User can see the Delete post  |  &cross; | &check;  |Pass  | This page is available only to authorized users |
+| User can see the  Update post  |  &cross; | &check;  |Pass  | This page is available only to authorized users |
+| User can see the  attach image  |  &cross; | &check;  |Pass  | This page is available only to authorized users |
+| User can like post and unlike  |  &cross; | &check;  |Pass  | This page is available only to authorized users |
+| Admin can create service, edit and delete from admin site  |  &cross; | &check;  |Pass  | This page is available only for authorized admin |
+| Admin can create post, update and delete from admin panel  |  &cross; | &check;  |Pass  | This page is available only for authorized admin |
+| Admin can approve or delete comments from admin panel  |  &cross; | &check;  |Pass  | This page is available only for authorized admin |
+| |
+
+
+
+
+
+
+
+
 …or create a new repository on the command line:
 echo "# Marketplace-Majesty" >> README.md
 git init
