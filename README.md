@@ -4,7 +4,7 @@
 
 # Shop Platform
 
-This project is a commercial shop platform designed to provide a seamless shopping experience for customers, along with robust management tools for admins.
+This project is a commercial shop platform designed to provide a seamless shopping experience for customers, along with robust management tools for admins and vendors.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ This project is a commercial shop platform designed to provide a seamless shoppi
 
 ## Overview
 
-The Shop Platform is an e-commerce solution that allows customers to browse products, add items to their cart, and complete purchases. Admins have the ability to manage products, orders, and user accounts.
+The Shop Platform is an e-commerce solution that allows customers to browse products, add items to their cart, and complete purchases. Admins have the ability to manage products, orders, and user accounts. Vendors can manage their products and view orders related to their items.
 
 ## Features
 
@@ -29,6 +29,7 @@ The Shop Platform is an e-commerce solution that allows customers to browse prod
 - Shopping Cart and Checkout
 - Order Management
 - Wishlist
+- Vendor Portal for Managing Products and Orders
 - Admin Panel for Managing Products, Orders, and Users
 
 ## Technologies Used
@@ -71,42 +72,47 @@ To install and run this project locally:
 1. Register for an account or log in if you already have one.
 2. Browse products and add items to your cart.
 3. Proceed to checkout to complete your purchase.
-4. Admin users can log in to the admin panel to manage products, orders, and users.
+4. Vendors can log in to the vendor portal to manage their products and view orders.
+5. Admin users can log in to the admin panel to manage products, orders, and users.
 
 ## Manual Testing Plan
 
 The available functionality and user experience are reflected in the table below.
 
-| Goals/Actions  | As a Guest | As a Logged User | As an Admin | Result | Comment |
-|----------------|:----------:|:----------------:|:-----------:|--------|---------|
-| User can navigate through the menu and pages | &check; | &check; | &check; | Pass | Menu items redirect to the appropriate pages |
-| User can see the home page | &check; | &check; | &check; | Pass | |
-| User can view product listings | &check; | &check; | &check; | Pass | |
-| User can view individual product details | &check; | &check; | &check; | Pass | |
-| User can search for products | &check; | &check; | &check; | Pass | Search functionality works correctly |
-| User can see the cart page | &check; | &check; | &check; | Pass | |
-| User can add products to the cart | &check; | &check; | &check; | Pass | Product is successfully added to the cart |
-| User can remove products from the cart | &check; | &check; | &check; | Pass | Product is successfully removed from the cart |
-| User can see the checkout page | &cross; | &check; | &check; | Pass | Checkout page is only available to logged-in users |
-| User can proceed to checkout and place an order | &cross; | &check; | &check; | Pass | Order placement is successful for logged-in users |
-| User can see the Sign Up page | &check; | &check; | &check; | Pass | |
-| User can see the Login page | &check; | &check; | &check; | Pass | |
-| User can log out | &cross; | &check; | &check; | Pass | |
-| User can see their account details | &cross; | &check; | &check; | Pass | Only available to logged-in users |
-| User can edit their account details | &cross; | &check; | &check; | Pass | Only available to logged-in users |
-| User can view their order history | &cross; | &check; | &check; | Pass | Only available to logged-in users |
-| User can track the status of their orders | &cross; | &check; | &check; | Pass | Only available to logged-in users |
-| User can view the Wishlist page | &check; | &check; | &check; | Pass | |
-| User can add products to the Wishlist | &check; | &check; | &check; | Pass | Product is successfully added to the Wishlist |
-| User can remove products from the Wishlist | &check; | &check; | &check; | Pass | Product is successfully removed from the Wishlist |
-| Admin can view all orders in the admin panel | &cross; | &cross; | &check; | Pass | Only available to admin users |
-| Admin can update the status of orders | &cross; | &cross; | &check; | Pass | Only available to admin users |
-| Admin can add new products from the admin panel | &cross; | &cross; | &check; | Pass | Only available to admin users |
-| Admin can edit existing products from the admin panel | &cross; | &cross; | &check; | Pass | Only available to admin users |
-| Admin can delete products from the admin panel | &cross; | &cross; | &check; | Pass | Only available to admin users |
-| Admin can manage user accounts | &cross; | &cross; | &check; | Pass | Only available to admin users |
-| Admin can view sales reports | &cross; | &cross; | &check; | Pass | Only available to admin users |
-| Admin can manage site settings | &cross; | &cross; | &check; | Pass | Only available to admin users |
+| Goals/Actions  | As a Guest | As a Logged User | As a Vendor | As an Admin | Result | Comment |
+|----------------|:----------:|:----------------:|:-----------:|:-----------:|--------|---------|
+| User can navigate through the menu and pages | &check; | &check; | &check; | &check; | Pass | Menu items redirect to the appropriate pages |
+| User can see the home page | &check; | &check; | &check; | &check; | Pass | |
+| User can view product listings | &check; | &check; | &check; | &check; | Pass | |
+| User can view individual product details | &check; | &check; | &check; | &check; | Pass | |
+| User can search for products | &check; | &check; | &check; | &check; | Pass | Search functionality works correctly |
+| User can see the cart page | &check; | &check; | &check; | &check; | Pass | |
+| User can add products to the cart | &check; | &check; | &check; | &check; | Pass | Product is successfully added to the cart |
+| User can remove products from the cart | &check; | &check; | &check; | &check; | Pass | Product is successfully removed from the cart |
+| User can see the checkout page | &cross; | &check; | &check; | &check; | Pass | Checkout page is only available to logged-in users |
+| User can proceed to checkout and place an order | &cross; | &check; | &check; | &check; | Pass | Order placement is successful for logged-in users |
+| User can see the Sign Up page | &check; | &check; | &check; | &check; | Pass | |
+| User can see the Login page | &check; | &check; | &check; | &check; | Pass | |
+| User can log out | &cross; | &check; | &check; | &check; | Pass | |
+| User can see their account details | &cross; | &check; | &check; | &check; | Pass | Only available to logged-in users |
+| User can edit their account details | &cross; | &check; | &check; | &check; | Pass | Only available to logged-in users |
+| User can view their order history | &cross; | &check; | &check; | &check; | Pass | Only available to logged-in users |
+| User can track the status of their orders | &cross; | &check; | &check; | &check; | Pass | Only available to logged-in users |
+| User can view the Wishlist page | &check; | &check; | &check; | &check; | Pass | |
+| User can add products to the Wishlist | &check; | &check; | &check; | &check; | Pass | Product is successfully added to the Wishlist |
+| User can remove products from the Wishlist | &check; | &check; | &check; | &check; | Pass | Product is successfully removed from the Wishlist |
+| Vendor can add new products | &cross; | &cross; | &check; | &check; | Pass | Only available to vendors and admins |
+| Vendor can edit their products | &cross; | &cross; | &check; | &check; | Pass | Only available to vendors and admins |
+| Vendor can delete their products | &cross; | &cross; | &check; | &check; | Pass | Only available to vendors and admins |
+| Vendor can view orders related to their products | &cross; | &cross; | &check; | &check; | Pass | Only available to vendors and admins |
+| Admin can view all orders in the admin panel | &cross; | &cross; | &cross; | &check; | Pass | Only available to admin users |
+| Admin can update the status of orders | &cross; | &cross; | &cross; | &check; | Pass | Only available to admin users |
+| Admin can add new products from the admin panel | &cross; | &cross; | &check; | &check; | Pass | Only available to vendors and admins |
+| Admin can edit existing products from the admin panel | &cross; | &cross; | &check; | &check; | Pass | Only available to vendors and admins |
+| Admin can delete products from the admin panel | &cross; | &cross; | &check; | &check; | Pass | Only available to vendors and admins |
+| Admin can manage user accounts | &cross; | &cross; | &cross; | &check; | Pass | Only available to admin users |
+| Admin can view sales reports | &cross; | &cross; | &cross; | &check; | Pass | Only available to admin users |
+| Admin can manage site settings | &cross; | &cross; | &cross; | &check; | Pass | Only available to admin users |
 
 ## Contributing
 
@@ -120,7 +126,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) fi
 
 For any inquiries or issues, please contact [yourname](mailto:yourname@example.com).
 
-| |
 
 
 
