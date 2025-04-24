@@ -3,6 +3,7 @@ boto3==1.20.26
 botocore==1.23.54
 certifi==2024.2.2
 charset-normalizer==3.3.2
+dj-database-url==2.1.0
 Django==4.2.7
 django-anymail==10.3
 django-cors-headers==3.14.0
@@ -12,12 +13,14 @@ djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 drf-yasg==1.21.7
 environs==11.0.0
+gunicorn==22.0.0
 idna==3.7
 inflection==0.5.1
 jmespath==0.10.0
 marshmallow==3.21.1
 packaging==24.0
 pillow==10.3.0
+psycopg2==2.9.9
 PyJWT==2.6.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
