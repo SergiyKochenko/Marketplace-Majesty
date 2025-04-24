@@ -1,82 +1,86 @@
-import { useState, useEffect } from 'react';
-import Sidebar from './Sidebar';
+import { useState, useEffect } from 'react'
+import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';
 import moment from 'moment';
 
+
 function Notifications() {
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  const userData = UserData();
+    const [notifications, setNotifications] = useState([])
+    // eslint-disable-next-line no-unused-vars
+    const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    apiInstance
-      .get(`customer/notification/${userData?.user_id}/`)
-      .then((res) => {
-        setNotifications(res.data);
-        setLoading(false); // Set loading to false after data is fetched
-      })
-      .catch((error) => {
-        console.error('Error fetching notifications:', error);
-        setLoading(false); // Set loading to false even if there's an error
-      });
-  }, [userData?.user_id]); // Added dependency to avoid stale state
+    const axios = apiInstance
+    const userData = UserData()
 
-  return (
-    <div>
-      <main className="mt-5" style={{ marginBottom: 200 }}>
-        <div className="container">
-          <section className="">
-            <div className="row">
-              <Sidebar />
-              <div className="col-lg-9 mt-1">
-                <section className="">
-                  <main className="mb-5">
-                    <div className="container px-4">
-                      <section className="">
-                        <h3 className="mb-3">
-                          <i className="fas fa-bell" /> Notifications{' '}
-                        </h3>
-                        {loading ? (
-                          <h6>Loading notifications...</h6>
-                        ) : (
-                          <div className="list-group">
-                            {notifications.map((noti, index) => (
-                              <div
-                                key={noti?.id || index}
-                                className="list-group-item list-group-item-action"
-                              >
-                                <div className="d-flex w-100 justify-content-between">
-                                  <h5 className="mb-1">New Order!</h5>
-                                  <small>{moment(noti.date).format('MM-DD-YYYY')}</small>
-                                </div>
-                                <p className="mb-1">
-                                  Your order #{noti?.order?.oid} was successful
-                                </p>
-                                <small>Total: ${noti?.order?.total}</small> <br />
-                                <small>Shipping: ${noti?.order?.shipping_amount}</small> <br />
-                                <small>Tax: ${noti?.order?.tax_fee}</small> <br />
-                                <small>Service Fee: ${noti?.order?.service_fee}</small> <br />
-                              </div>
-                            ))}
+    useEffect(() => {
+        axios.get(`customer/notification/${userData?.user_id}/`).then((res) => {
+            setNotifications(res.data);
+            if (notifications) {
+                setLoading(false)
+            }
+        })
+    }, [])
 
-                            {notifications.length < 1 && (
-                              <h6>No notifications yet</h6>
-                            )}
-                          </div>
-                        )}
-                      </section>
-                    </div>
-                  </main>
-                </section>
-              </div>
-            </div>
-          </section>
+    console.log(notifications);
+
+    return (
+        <div>
+            <main className="mt-5" style={{ marginBottom: 200 }}>
+                <div className="container">
+                    <section className="">
+                        <div className="row">
+                            <Sidebar />
+                            <div className="col-lg-9 mt-1">
+                                <section className="">
+                                    <main className="mb-5" style={{}}>
+                                        <div className="container px-4">
+                                            {/* Section: Summary */}
+                                            <section className="">
+                                                <h3 className="mb-3">
+                                                    {" "}
+                                                    <i className="fas fa-bell" /> Notifications{" "}
+                                                </h3>
+                                                <div className="list-group">
+                                                    {notifications.map((noti, index) => (
+                                                        <a key={noti?.id || index} href="#" className="list-group-item list-group-item-action" aria-current="true" >
+                                                            <div className="d-flex w-100 justify-content-between">
+                                                                <h5 className="mb-1">New Order!</h5>
+                                                                <small>{moment(noti.date).format('MM-DD-YYYY')}</small>
+                                                            </div>
+                                                            <p className="mb-1">
+                                                                Your order #{noti?.order?.oid} was successfull
+                                                            </p>
+                                                            <small className=''>Total: ${noti?.order?.total}</small> <br />
+                                                            <small className=''>Shipping: ${noti?.order?.shipping_amount}</small> <br />
+                                                            <small className=''>Tax: ${noti?.order?.tax_fee}</small> <br />
+                                                            <small className=''>Service Fee: ${noti?.order?.service_fee}</small> <br />
+                                                        </a>
+                                                    ))}
+
+                                                    {notifications.length < 1 &&
+                                                        <h6>No notifications yet</h6>
+                                                    }
+
+                                                </div>
+                                            </section>
+                                            {/* Section: Summary */}
+                                            {/* Section: MSC */}
+                                            {/* Section: MSC */}
+                                        </div>
+                                        {/* Container for demo purpose */}
+                                    </main>
+                                </section>
+                            </div>
+                        </div>
+                    </section>
+                    {/*Section: Wishlist*/}
+                </div>
+            </main>
+
         </div>
-      </main>
-    </div>
-  );
+    )
 }
 
-export default Notifications;
+export default Notifications

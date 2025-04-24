@@ -30,7 +30,6 @@ function Cart() {
     const [state, setState] = useState("")
     const [country, setCountry] = useState("")
 
-    // eslint-disable-next-line no-unused-vars
     const [cartCount, setCartCount] = useContext(CartContext)
 
     const userData = UserData();
