@@ -61,28 +61,29 @@ function ProductDetail() {
     }
 
     const handleAddToCart = async () => {
-        try{
-            const formdata = new FormData()
+        try {
+            const formdata = new FormData();
+            formdata.append('product_id', product.id);
+            formdata.append('user_id', userData?.user_id);
+            formdata.append('qty', qtyValue);
+            formdata.append('price', product.price);
+            formdata.append('shipping_amount', product.shipping_amount);
+            formdata.append('country', currentAddress.country);
+            formdata.append('size', sizeValue);
+            formdata.append('color', colorValue);
+            formdata.append('cart_id', cart_id);
 
-            formdata.append('product_id', product.id)
-            formdata.append('user_id', userData?.user_id)
-            formdata.append('qty', qtyValue)
-            formdata.append('price' , product.price)
-            formdata.append('shipping_amount', product.shipping_amount)
-            formdata.append('country', currentAddress.country)
-            formdata.append('size', sizeValue)
-            formdata.append('color', colorValue)
-            formdata.append('cart_id', cart_id)
-
-            // Make a post request to the cart api view
-            await apiInstance.post('cart-view/', formdata)
-
-            // Fetch updated cart items
-            const url = userData ? `cart-list/${cart_id}/${userData?.user_id}/` : `cart-list/${cart_id}/`
+            const response = await apiInstance.post('cart-view/', formdata);
+            Swal.fire({                       // <-- New alert added here
+                icon: "success",
+                title: response.data.message,
+            });
+            const url = userData 
+                ? `cart-list/${cart_id}/${userData?.user_id}/` 
+                : `cart-list/${cart_id}/`;
             apiInstance.get(url).then((res) => {
-                setCartCount(res.data.length)
-            })
-            
+                setCartCount(res.data.length);
+            });
         } catch (error) {
             console.log(error);
         }

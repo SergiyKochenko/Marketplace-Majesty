@@ -1,28 +1,28 @@
-import { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuthStore } from '../../store/auth'
-import { CartContext } from '../plugin/Context'
+import { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../store/auth';
+import { CartContext } from '../plugin/Context';
 
 function StoreHeader() {
   const [isLoggedIn, user] = useAuthStore((state) => [
     state.isLoggedIn,
     state.user,
-  ])
+  ]);
 
-  const cartCount = useContext(CartContext)
-  
-  const [search, setSearch] = useState("")
+  const cartCount = useContext(CartContext);
+
+  const [search, setSearch] = useState('');
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
-    console.log(search);
-}
+  };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const handleSearchSubmit = () => {
-    navigate(`/search?query=${search}`)
-}
+  const handleSearchSubmit = (event) => {
+    event.preventDefault(); // Prevent default form submission
+    navigate(`/search?query=${search}`);
+  };
 
   return (
     <div>
@@ -116,55 +116,53 @@ function StoreHeader() {
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
                     <Link className="dropdown-item" to="/vendor/dashboard/">
-                      {" "}
                       <i className="fas fa-user"></i> Dashboard
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/vendor/products/">
-                      {" "}
                       <i className="bi bi-grid-fill"></i> Products
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/vendor/product/new/">
-                      {" "}
+                    <Link className="dropdown-item" to="/vendor/add-product/">
                       <i className="fas fa-plus-circle"></i> Add Products
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/vendor/orders/">
-                      {" "}
                       <i className="fas fa-shopping-cart"></i> Orders
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/vendor/earning/">
-                      {" "}
                       <i className="fas fa-dollar-sign"></i> Earning
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to={user?.vendor_id ? `/vendor/reviews/${user.vendor_id}` : '#'}>
-                      {" "}
+                    <Link
+                      className="dropdown-item"
+                      to={
+                        user?.vendor_id
+                          ? `/vendor/reviews/${user.vendor_id}`
+                          : '/vendor/dashboard/'
+                      }
+                    >
                       <i className="fas fa-star"></i> Reviews
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/vendor/coupon/">
-                      {" "}
                       <i className="fas fa-tag"></i> Coupon
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/vendor/notifications/">
-                      {" "}
                       <i className="fas fa-bell fa-shake"></i> Notifications
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/vendor/settings/">
-                      {" "}
                       <i className="fas fa-gear fa-spin"></i> Settings
                     </Link>
                   </li>
@@ -172,47 +170,48 @@ function StoreHeader() {
               </li>
             </ul>
             <div className="d-flex">
-              <input
-                onChange={handleSearchChange}
-                name="search"
-                className="form-control me-2"
-                type="text"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button
-                onClick={handleSearchSubmit}
-                className="btn btn-outline-success me-2"
-                type="submit"
-              >
-                Search
-              </button>
+              <form onSubmit={handleSearchSubmit} className="d-flex">
+                <input
+                  onChange={handleSearchChange}
+                  name="search"
+                  className="form-control me-2"
+                  type="text"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <button className="btn btn-outline-success me-2" type="submit">
+                  Search
+                </button>
+              </form>
             </div>
-            
-              {isLoggedIn()
-                ? 
-                
-                <>
-                      <Link className="btn btn-primary me-2" to="/vendor/dashboard/">Dashboard</Link>
-                      <Link className="btn btn-primary me-2" to="/logout">Logout</Link>
-                </>
-
-                :
-                <>
-                    <Link className="btn btn-primary me-2" to="/login">Login</Link>
-                    <Link className="btn btn-primary me-2" to="/register">Register</Link>
-                </>
-            }
-            
+            {isLoggedIn() ? (
+              <>
+                <Link className="btn btn-primary me-2" to="/vendor/dashboard/">
+                  Dashboard
+                </Link>
+                <Link className="btn btn-primary me-2" to="/logout">
+                  Logout
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link className="btn btn-primary me-2" to="/login">
+                  Login
+                </Link>
+                <Link className="btn btn-primary me-2" to="/register">
+                  Register
+                </Link>
+              </>
+            )}
             <Link className="btn btn-danger" to="/cart/">
-              <i className="fas fa-shopping-cart"></i>{" "}
+              <i className="fas fa-shopping-cart"></i>{' '}
               <span id="cart-total-items">{cartCount}</span>
             </Link>
           </div>
         </div>
       </nav>
     </div>
-  )
+  );
 }
 
-export default StoreHeader
+export default StoreHeader;

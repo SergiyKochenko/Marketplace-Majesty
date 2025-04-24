@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -17,12 +18,14 @@ const Toast =Swal.mixin({
 
 function Search() {
     const [products, setProducts] = useState([])
+    // eslint-disable-next-line no-unused-vars
     const [category, setCategory] = useState([])
 
     const [colorValue, setColorValue] = useState("No Color")
     const [sizeValue, setSizeValue] = useState("No Size")
     const [qtyValue, setQtyValue] = useState(1)
 
+    // eslint-disable-next-line no-unused-vars
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [selectedColors, setSelectedColors] = useState({});
 
@@ -166,8 +169,8 @@ function Search() {
                                     </li>
                                 <div className="p-1 mt-0 pt-0 d-flex flex-wrap">
                             {p.size?.map((size, index) => (
-                                <li>
-                                    <button on onClick={(e) => handleSizeButtonClick(e, p.id, size.name)} className="btn btn-secondary btn-sm me-2 mb-1">
+                                <li key={index}>
+                                    <button onClick={(e) => handleSizeButtonClick(e, p.id, size.name)} className="btn btn-secondary btn-sm me-2 mb-1">
                                         {size.name}
                                     </button>
                                 </li>
@@ -183,7 +186,7 @@ function Search() {
                             </li>
                             <div className="p-1 mt-0 pt-0 d-flex flex-wrap">
                             {p.color?.map((color, index) => (
-                                <li>
+                                <li key={index}>
                                 <button
                                     className="btn btn-sm me-2 mb-1 p-3"
                                     style={{ backgroundColor: `${color.color_code}`}}
@@ -224,7 +227,7 @@ function Search() {
 
                 <div className='row'>
                 {category?.map((c, index) => (
-                <div className="col-lg-2">
+                <div className="col-lg-2" key={index}>
                   <img src={c.image} style={{ width: "100px", height: "100px", borderRadius: "50%", objectFit: "cover" }} alt="" />
                   <h6>{c.title}</h6>
                 </div>
