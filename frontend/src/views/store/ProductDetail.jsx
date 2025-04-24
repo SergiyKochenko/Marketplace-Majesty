@@ -25,6 +25,7 @@ function ProductDetail() {
     
     const [createReview, setCreateReview] = useState({ user_id: 0, product_id: product?.id, review: "", rating: 0, })
 
+    // eslint-disable-next-line no-unused-vars
     const [cartCount, setCartCount] = useContext(CartContext)
 
     const param = useParams()

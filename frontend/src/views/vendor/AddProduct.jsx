@@ -1,13 +1,17 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react'
 import Sidebar from './Sidebar';
 import apiInstance from '../../utils/axios';
+// eslint-disable-next-line no-unused-vars
 import { Link, useNavigate } from 'react-router-dom';
+// eslint-disable-next-line no-unused-vars
 import moment from 'moment';
 import UserData from '../plugin/UserData';
 import Swal from 'sweetalert2';
 
 
 function AddProduct() {
+  // eslint-disable-next-line no-unused-vars
   const userData = UserData()
 
   const [product, setProduct] = useState([])
@@ -134,7 +138,7 @@ function AddProduct() {
               formdata.append(`gallery[${index}][image]`, item.image.file)
           }
       })
-
+// eslint-disable-next-line no-unused-vars
       const response = await apiInstance.post(`vendor-create-product/`, formdata, {
           headers: {
             'Content-Type': 'multipart/form-data'
