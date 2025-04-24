@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import { Link, useParams } from 'react-router-dom'
+// eslint-disable-next-line no-unused-vars
 import moment from 'moment'
 
 
@@ -234,8 +235,8 @@ function OrderDetail() {
                             </td>
                             <td>
                               {order.tracking_id == null || order.tracking_id == 'undefined'
-                                ? <button class="btn btn-secondary btn-sm" disabled> No Tracking Yet<i className='fas fa-plus'></i></button>
-                                : <a class="btn btn-success btn-sm" target='_blank' href={`${order.delivery_couriers?.tracking_website}?${order.delivery_couriers?.url_parameter}=${order.tracking_id}`}> Track Item <i className='fas fa-location-arrow'></i></a>
+                                ? <button className="btn btn-secondary btn-sm" disabled> No Tracking Yet<i className='fas fa-plus'></i></button>
+                                : <a className="btn btn-success btn-sm" target='_blank' href={`${order.delivery_couriers?.tracking_website}?${order.delivery_couriers?.url_parameter}=${order.tracking_id}`}> Track Item <i className='fas fa-location-arrow'></i></a>
                               }
                             </td>
                           </tr>

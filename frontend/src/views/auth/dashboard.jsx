@@ -1,9 +1,8 @@
-import React from 'react'
 import { useAuthStore } from '../../store/auth'
 import { Link } from 'react-router-dom'
 
 function Dashboard() {
-    const [isLoggedIn, setIsLoggedIn] = useAuthStore((state) => [
+    const [isLoggedIn] = useAuthStore((state) => [
         state.isLoggedIn,
         state.user
     ])

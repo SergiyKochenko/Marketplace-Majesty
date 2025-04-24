@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from './Sidebar';
 import apiInstance from '../../utils/axios';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import UserData from '../plugin/UserData';
 
@@ -145,7 +145,7 @@ function UpdateProduct() {
         }
     })
 
-    const response = await apiInstance.patch(`vendor-update-product/${userData?.vendor_id}/${param.pid}/`, formdata, {
+    await apiInstance.patch(`vendor-update-product/${userData?.vendor_id}/${param.pid}/`, formdata, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

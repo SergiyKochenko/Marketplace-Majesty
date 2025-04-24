@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
+// eslint-disable-next-line no-unused-vars
 import moment from 'moment';
 import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';

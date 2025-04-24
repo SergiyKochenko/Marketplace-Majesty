@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';
-import Swal from 'sweetalert2';
-import moment from 'moment';
+
 
 function Settings() {
   const [profile, setProfile] = useState({

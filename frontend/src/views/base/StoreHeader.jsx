@@ -1,4 +1,4 @@
-import React, {  useState, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/auth'
 import { CartContext } from '../plugin/Context'
@@ -145,7 +145,7 @@ function StoreHeader() {
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/vendor/reviews/">
+                    <Link className="dropdown-item" to={user?.vendor_id ? `/vendor/reviews/${user.vendor_id}` : '#'}>
                       {" "}
                       <i className="fas fa-star"></i> Reviews
                     </Link>
@@ -193,7 +193,7 @@ function StoreHeader() {
                 ? 
                 
                 <>
-                      <Link className="btn btn-primary me-2" to="/dashboard">Dashboard</Link>
+                      <Link className="btn btn-primary me-2" to="/vendor/dashboard/">Dashboard</Link>
                       <Link className="btn btn-primary me-2" to="/logout">Logout</Link>
                 </>
 
