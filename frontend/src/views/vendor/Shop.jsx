@@ -1,8 +1,11 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, useParams } from 'react-router-dom';
+// eslint-disable-next-line no-unused-vars
 import Sidebar from './Sidebar';
 import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';
+// eslint-disable-next-line no-unused-vars
 import moment from 'moment';
 import Swal from 'sweetalert2'
 import { CartContext } from '../plugin/Context';
@@ -207,7 +210,7 @@ function Shop() {
                                     <div className="p-1 mt-0 pt-0 d-flex flex-wrap">
                                 {p.size?.map((size, index) => (
                                     <li key={index}>
-                                        <button on onClick={(e) => handleSizeButtonClick(e, p.id, size.name)} className="btn btn-secondary btn-sm me-2 mb-1">
+                                        <button onClick={(e) => handleSizeButtonClick(e, p.id, size.name)} className="btn btn-secondary btn-sm me-2 mb-1">
                                             {size.name}
                                         </button>
                                     </li>
@@ -244,10 +247,11 @@ function Shop() {
                                 <button
                                     type="button"
                                     className="btn btn-danger px-3 me-1 mb-1 ms-2"
+                                    onClick={() => addToWishlist(p.id, userData?.user_id)}
                                 >
                                     <i className="fas fa-heart" />
                                 </button>
-                                </div>
+                            </div>
                             </ul>
                             <button
                                 type="button"

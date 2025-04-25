@@ -3,7 +3,14 @@ import { login } from '../../utils/auth';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth';
 import { Link } from 'react-router-dom';
-
+import Swal from 'sweetalert2'
+const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 3500,
+    timerProgressBar: true
+})
 const Login = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
@@ -25,16 +32,20 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-
+        // Validation: check for empty fields
+        if (username.trim() === "" || password.trim() === "") {
+            Toast.fire({ icon: "error", title: "Please fill in all fields" });
+            setIsLoading(false);
+            return;
+        }
         const { error } = await login(username, password);
         if (error) {
-            alert(error);
+            Toast.fire({ icon: "error", title: error });
         } else {
             navigate('/');
             resetForm();
         }
         setIsLoading(false);
-
     };
     return (
         <section>
