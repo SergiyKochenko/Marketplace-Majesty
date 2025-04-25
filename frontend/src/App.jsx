@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, HashRouter } from 'react-router-dom';
 import Register from './views/auth/register';
 import Login from './views/auth/login'
 
@@ -59,7 +59,7 @@ function App() {
   return (
     <CartContext.Provider value={[cartCount, setCartCount]}>
 
-      <BrowserRouter>
+      <HashRouter>
         <StoreHeader />
           <MainWrapper>
             <Routes>
@@ -105,7 +105,7 @@ function App() {
             </Routes>
           </MainWrapper>
         <StoreFooter/>
-      </BrowserRouter>
+      </HashRouter>
 
     </CartContext.Provider>
   )
