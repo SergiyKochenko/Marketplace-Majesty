@@ -41,6 +41,7 @@ import VendorSettings from './views/vendor/VendorSettings';
 import Shop from './views/vendor/Shop';
 import AddProduct from './views/vendor/AddProduct';
 import UpdateProduct from './views/vendor/UpdateProduct';
+import VendorRegister from './views/vendor/VendorRegister';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -100,6 +101,7 @@ function App() {
               <Route path="/vendor/:slug/" element={<PrivateRoute><Shop /></PrivateRoute>} />
               <Route path="/vendor/add-product/" element={<PrivateRoute><AddProduct /></PrivateRoute>} />
               <Route path="/vendor/product/update/:pid/" element={<PrivateRoute><UpdateProduct /></PrivateRoute>} />
+              <Route path="/vendor/register/" element={<VendorRegister />} />
 
 
             </Routes>

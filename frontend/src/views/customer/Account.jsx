@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import apiInstance from "../../utils/axios";
 import UserData from "../plugin/UserData";
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar';
+import { Link } from "react-router-dom";
 
 function Account() {
   const [profile, setProfile] = useState({});
@@ -10,10 +11,9 @@ function Account() {
   useEffect(() => {
       apiInstance.get(`user/profile/${userData?.user_id}/`).then((res) => {
         setProfile(res.data);
-        console.log(profile)
+        console.log(profile);
       });
   }, []);
-
 
   return (
       <main className="mt-5">
@@ -29,12 +29,10 @@ function Account() {
                     <div className="row rounded shadow p-3">
                       <h2>Hi {profile.full_name}, </h2>
                       <div className="col-lg-12 mb-4 mb-lg-0 h-100">
-                        From your account dashboard. you can easily check &amp;
-                        view your <a href="">orders</a>, manage your{" "}
-                        <a href="">
-                          shipping
-                        </a>
-                        <a href="">Edit Account</a>
+                        From your account dashboard, you can easily check &amp;
+                        view your <Link to="/customer/orders/">orders</Link>, manage your{" "}
+                        <Link to="/customer/shipping/">shipping</Link>, or{" "}
+                        <Link to="/customer/settings/">Edit Account</Link>.
                       </div>
                     </div>
                   </section>
@@ -45,7 +43,7 @@ function Account() {
         </section>
       </div>
       </main>
-  )
+  );
 }
 
 export default Account;

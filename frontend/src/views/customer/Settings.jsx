@@ -2,7 +2,15 @@ import { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';
+import Swal from 'sweetalert2';
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top",
+  showConfirmButton: false,
+  timer: 3500,
+  timerProgressBar: true
+});
 
 function Settings() {
   const [profile, setProfile] = useState({
@@ -63,9 +71,16 @@ function Settings() {
           'Content-Type': 'multipart/form-data',
         },
       });
-      window.location.reload();
+      Toast.fire({
+        icon: "success",
+        title: "Profile updated successfully!"
+      });
     } catch (error) {
       console.log(error);
+      Toast.fire({
+        icon: "error",
+        title: "Failed to update profile. Please try again."
+      });
     }
   };
 
